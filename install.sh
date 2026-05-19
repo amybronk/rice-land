@@ -23,6 +23,10 @@ REPO_DIR="$HOME/.local/share/quickshell-dotfiles"
 # Voeg hier gewoon namen toe als je meer mappen aanmaakt
 FOLDERS=("quickshell" "hypr" "rofi" "matugen")
 
+# Wallpaper mappen — pas aan als jouw paden anders zijn
+WALLPAPER_DIR="$HOME/Pictures/wallpapers"
+DEFAULT_PICTURES="$HOME/Pictures"
+
 # ── detecteer of dit een eerste installatie of een update is ────
 
 IS_UPDATE=false
@@ -150,7 +154,32 @@ else
     echo "✓ Sudoers regel bestaat al"
 fi
 
-# ── 8. systeem updaten & Qt-versie bijhouden ─────────────────────
+# ── 8. wallpaper map aanmaken (alleen bij eerste installatie) ────
+
+if ! $IS_UPDATE; then
+    echo ""
+    echo ">>> Wallpaper map aanmaken..."
+
+    if [ ! -d "$WALLPAPER_DIR" ]; then
+        mkdir -p "$WALLPAPER_DIR"
+
+        # Kopieer de inhoud van ~/Pictures naar de wallpaper map
+        # cp -r met /. zodat alleen de bestanden worden gekopieerd, niet de map zelf
+        if [ -d "$DEFAULT_PICTURES" ] && [ "$(ls -A "$DEFAULT_PICTURES")" ]; then
+            cp -r "$DEFAULT_PICTURES/." "$WALLPAPER_DIR/"
+            echo "  ✓ Bestaande fotos gekopieerd naar $WALLPAPER_DIR"
+        fi
+
+        # Verwijder de originele Pictures map (haal # weg om te activeren)
+        # rm -rf "$DEFAULT_PICTURES"
+
+        echo "✓ Wallpaper map aangemaakt: $WALLPAPER_DIR"
+    else
+        echo "✓ Wallpaper map bestaat al, overgeslagen"
+    fi
+fi
+
+# ── 9. systeem updaten & Qt-versie bijhouden ─────────────────────
 #
 #  QuickShell (AUR) is gecompileerd tegen Qt. Als Qt een major of
 #  minor versiesprong maakt (bijv. 6.7 → 6.8), werkt de bestaande
@@ -180,7 +209,7 @@ echo ""
 echo "  Qt versie vóór update : $QT_VERSION_VOOR"
 echo "  Qt versie na update   : $QT_VERSION_NA"
 
-# ── 9. packages installeren / quickshell hercompileren ───────────
+# ── 10. packages installeren / quickshell hercompileren ───────────
 
 echo ""
 echo ">>> Packages controleren..."
@@ -208,7 +237,7 @@ else
     echo "✓ QuickShell is up-to-date"
 fi
 
-# ── 10. init systeem detecteren ──────────────────────────────────
+# ── 11. init systeem detecteren ──────────────────────────────────
 
 echo ""
 echo ">>> Init systeem detecteren..."
@@ -240,7 +269,7 @@ echo "loginctl available= $HEEFT_LOGINCTL" >> "$QS_CONFIG_DIR/system_info.txt"
 echo "✓ Init systeem gedetecteerd: $INIT"
 echo "✓ loginctl beschikbaar: $HEEFT_LOGINCTL"
 
-# ── 11. klaar ────────────────────────────────────────────────────
+# ── 12. klaar ────────────────────────────────────────────────────
 
 echo ""
 if $IS_UPDATE; then
