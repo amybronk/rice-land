@@ -1,0 +1,15 @@
+[config]
+# Je kunt kiezen uit 'dynamic', 'monochrome', 'neutral', etc.
+palette = "dynamic" 
+
+[templates.rofi]
+input_path = '~/.config/matugen/templates/rofi.rasi'
+output_path = '~/.config/rofi/matugen-colors.rasi'
+
+[templates.quickshell]
+input_path = '~/.config/matugen/templates/colors.qml'
+output_path = '~/.config/quickshell/colors.qml' # Pas aan naar waar jouw Quickshell setup staat
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland_colors.conf'
+output_path = '~/.config/hypr/colors.conf'

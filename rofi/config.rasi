@@ -1,0 +1,7 @@
+@import "~/.config/rofi/matugen-colors.rasi"
+
+window {
+    background-color: @background;
+    text-color: @foreground;
+}
+/* gebruik de @primary voor geselecteerde items */
