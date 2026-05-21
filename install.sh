@@ -25,7 +25,9 @@ FOLDERS=("quickshell" "hypr" "rofi" "matugen")
 
 # Wallpaper mappen — pas aan als jouw paden anders zijn
 WALLPAPER_DIR="$HOME/Pictures/wallpapers"
-DEFAULT_PICTURES="$HOME/Pictures"
+PICTURES_DIR="$HOME/Pictures"
+DEFAULT_PICTURES_DIR="$REPO_DIR/default pictures"
+
 
 # ── detecteer of dit een eerste installatie of een update is ────
 
