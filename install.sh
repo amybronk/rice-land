@@ -167,8 +167,8 @@ if ! $IS_UPDATE; then
 
         # Kopieer alleen losse afbeeldingen uit ~/Pictures (geen submappen)
         # -maxdepth 1 voorkomt dat wallpapers zichzelf probeert te kopiëren
-        mkdir -p "$DEFAULT_PICTURES"
-        COPIED=$(find "$DEFAULT_PICTURES" -maxdepth 1 -type f \
+        mkdir -p "$PICTURES_DIR"
+        COPIED=$(find "$DEFAULT_PICTURES_DIR" -maxdepth 1 -type f \
             \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \
                -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.jxl" \) \
             -exec cp {} "$WALLPAPER_DIR/" \; -print | wc -l)
@@ -176,7 +176,7 @@ if ! $IS_UPDATE; then
         if [ "$COPIED" -gt 0 ]; then
             echo "  ✓ $COPIED foto('s) gekopieerd naar $WALLPAPER_DIR"
         else
-            echo "  ⚠ Geen afbeeldingen gevonden in $DEFAULT_PICTURES"
+            echo "  ⚠ Geen afbeeldingen gevonden in $PICTURES_DIR"
             echo "    Voeg zelf wallpapers toe aan: $WALLPAPER_DIR"
         fi
 
