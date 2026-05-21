@@ -25,12 +25,14 @@ FOLDERS=("quickshell" "hypr" "rofi" "matugen")
 
 # Wallpaper mappen — pas aan als jouw paden anders zijn
 WALLPAPER_DIR="$HOME/Pictures/wallpapers"
-DEFAULT_PICTURES="$HOME/Pictures"
+PICTURES_DIR="$HOME/Pictures"
+DEFAULT_PICTURES_DIR="$REPO_DIR/default pictures"
+
 
 # ── detecteer of dit een eerste installatie of een update is ────
 
 IS_UPDATE=false
-if [ -d "$REPO_DIR/.git" ] && command -v yay &>/dev/null; then
+if [ -d "$REPO_DIR/.git" ]; then
     IS_UPDATE=true
 fi
 
@@ -114,7 +116,7 @@ for folder in "${FOLDERS[@]}"; do
         mkdir -p "$CONFIG_DIR"
 
         # Backup maken als het een echte map is (geen symlink)
-        if [ -e "$CONFIG_DIR/$folder" ] && [ ! -L "$CONFIG_DIR/$folder" ]; then
+        if [ -d "$CONFIG_DIR/$folder" ] && [ ! -L "$CONFIG_DIR/$folder" ]; then
             BACKUP="$CONFIG_DIR/${folder}_backup_$(date +%Y%m%d_%H%M%S)"
             echo "  Backup gemaakt: $CONFIG_DIR/$folder → $BACKUP"
             mv "$CONFIG_DIR/$folder" "$BACKUP"
@@ -165,8 +167,8 @@ if ! $IS_UPDATE; then
 
         # Kopieer alleen losse afbeeldingen uit ~/Pictures (geen submappen)
         # -maxdepth 1 voorkomt dat wallpapers zichzelf probeert te kopiëren
-        mkdir -p "$DEFAULT_PICTURES"
-        COPIED=$(find "$DEFAULT_PICTURES" -maxdepth 1 -type f \
+        mkdir -p "$PICTURES_DIR"
+        COPIED=$(find "$DEFAULT_PICTURES_DIR" -maxdepth 1 -type f \
             \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \
                -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.jxl" \) \
             -exec cp {} "$WALLPAPER_DIR/" \; -print | wc -l)
@@ -174,7 +176,7 @@ if ! $IS_UPDATE; then
         if [ "$COPIED" -gt 0 ]; then
             echo "  ✓ $COPIED foto('s) gekopieerd naar $WALLPAPER_DIR"
         else
-            echo "  ⚠ Geen afbeeldingen gevonden in $DEFAULT_PICTURES"
+            echo "  ⚠ Geen afbeeldingen gevonden in $PICTURES_DIR"
             echo "    Voeg zelf wallpapers toe aan: $WALLPAPER_DIR"
         fi
 
