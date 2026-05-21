@@ -1,7 +1,149 @@
-@import "~/.config/rofi/matugen-colors.rasi"
+/**
+ * ═══════════════════════════════════════════════════════════════
+ * Rofi Dynamisch Material You Thema (Matugen)
+ * ═══════════════════════════════════════════════════════════════
+ */
 
-window {
-    background-color: @background;
-    text-color: @foreground;
+/* 1. Belangrijk: Importeer de kleuren die Matugen genereert */
+@import "~/.config/rofi/matugen-colors.rasi";
+
+/* 2. Algemene Rofi Instellingen */
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 true;
+    display-drun:               " ";
+    display-run:                " ";
+    display-filebrowser:        " ";
+    drun-display-format:        "{name}";
+    window-format:              "{w} · {c} · {t}";
 }
-/* gebruik de @primary voor geselecteerde items */
+
+/* 3. Globale Variabelen koppelen aan Matugen */
+* {
+    font:                        "JetBrainsMono Nerd Font 10";
+    
+    /* We mappen de Rofi-kleuren direct aan de Matugen output */
+    background:                  @surface;
+    foreground:                  @on-surface;
+    accent:                      @primary;
+    accent-text:                 @on-primary;
+    
+    background-color:            transparent;
+    text-color:                  @foreground;
+}
+
+/* 4. Het Hoofdvenster */
+window {
+    transparency:                "real";
+    location:                    center;
+    anchor:                      center;
+    fullscreen:                  false;
+    width:                       600px;
+    x-offset:                    0px;
+    y-offset:                    0px;
+
+    enabled:                     true;
+    margin:                      0px;
+    padding:                     0px;
+    border:                      2px solid;
+    border-radius:               12px;
+    border-color:                @accent; /* Rand krijgt de accentkleur */
+    background-color:            @background;
+    cursor:                      "default";
+}
+
+/* 5. De Layout */
+mainbox {
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     20px;
+    children:                    [ "inputbar", "listview" ];
+}
+
+/* 6. De Zoekbalk (Input) */
+inputbar {
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     10px;
+    border-radius:               8px;
+    background-color:            @background;
+    text-color:                  @foreground;
+    children:                    [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:                     true;
+    text-color:                  @accent;
+}
+
+entry {
+    enabled:                     true;
+    cursor:                      text;
+    placeholder:                 "Typ om te zoeken...";
+    placeholder-color:           @foreground;
+}
+
+/* 7. De Lijst met Applicaties */
+listview {
+    enabled:                     true;
+    columns:                     1;
+    lines:                       8;
+    cycle:                       true;
+    dynamic:                     true;
+    scrollbar:                   false;
+    layout:                      vertical;
+    reverse:                     false;
+    fixed-height:                true;
+    fixed-columns:               true;
+    
+    spacing:                     5px;
+    margin:                      0px;
+    padding:                     0px;
+    background-color:            transparent;
+}
+
+/* 8. De Individuele Regels (Entries) — HIER ZIT DE FIX VOOR HET CONTRAST */
+element {
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     8px;
+    border-radius:               6px;
+    cursor:                      pointer;
+}
+
+/* Normale rijen */
+element normal.normal {
+    background-color:            transparent;
+    text-color:                  @foreground;
+}
+
+/* De afwisselende rijen maken we transparent om de witte vlekken te fixen! */
+element alternate.normal {
+    background-color:            transparent; 
+    text-color:                  @foreground;
+}
+
+/* Geselecteerde rij (waar je met je pijltjes op staat) */
+element selected.normal {
+    background-color:            @accent;      /* Krijgt de primaire Matugen kleur */
+    text-color:                  @accent-text; /* Krijgt de contrasterende tekstkleur */
+}
+
+/* Icoontjes en tekst binnen de regels */
+element-icon {
+    background-color:            transparent;
+    text-color:                  inherit;
+    size:                        24px;
+    cursor:                      inherit;
+}
+
+element-text {
+    background-color:            transparent;
+    text-color:                  inherit;
+    cursor:                      inherit;
+    vertical-align:              0.5;
+    horizontal-align:            0.0;
+}
