@@ -11,7 +11,7 @@
 
 set -e  # stop bij een fout
 
-REPO_URL="https://github.com/amybronk/myquickshellwidget.git"
+REPO_URL="https://github.com/amybronk/rice-land.git"
 
 CONFIG_DIR="$HOME/.config"
 QS_CONFIG_DIR="$CONFIG_DIR/quickshell"
@@ -159,20 +159,23 @@ fi
 if ! $IS_UPDATE; then
     echo ""
     echo ">>> Wallpaper map aanmaken..."
-
+ 
     if [ ! -d "$WALLPAPER_DIR" ]; then
         mkdir -p "$WALLPAPER_DIR"
-
-        # Kopieer de inhoud van ~/Pictures naar de wallpaper map
-        # cp -r met /. zodat alleen de bestanden worden gekopieerd, niet de map zelf
-        if [ -d "$DEFAULT_PICTURES" ] && [ "$(ls -A "$DEFAULT_PICTURES")" ]; then
-            cp -r "$DEFAULT_PICTURES/." "$WALLPAPER_DIR/"
+ 
+        # Kopieer alleen losse bestanden uit ~/Pictures (geen submappen)
+        # -maxdepth 1 voorkomt dat wallpapers zichzelf probeert te kopiëren
+        if [ -d "$DEFAULT_PICTURES" ]; then
+            find "$DEFAULT_PICTURES" -maxdepth 1 -type f \
+                \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \
+                   -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.jxl" \) \
+                -exec cp {} "$WALLPAPER_DIR/" \;
             echo "  ✓ Bestaande fotos gekopieerd naar $WALLPAPER_DIR"
         fi
-
+ 
         # Verwijder de originele Pictures map (haal # weg om te activeren)
         # rm -rf "$DEFAULT_PICTURES"
-
+ 
         echo "✓ Wallpaper map aangemaakt: $WALLPAPER_DIR"
     else
         echo "✓ Wallpaper map bestaat al, overgeslagen"
