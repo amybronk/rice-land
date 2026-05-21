@@ -20,14 +20,23 @@ QS_CONFIG_DIR="$CONFIG_DIR/quickshell"
 REPO_DIR="$HOME/.local/share/quickshell-dotfiles"
 
 # Lijst met mappen die je wilt linken naar ~/.config
-# Voeg hier gewoon namen toe als je meer mappen aanmaakt
 FOLDERS=("quickshell" "hypr" "rofi" "matugen")
 
-# Wallpaper mappen — pas aan als jouw paden anders zijn
+# Wallpaper mappen
 WALLPAPER_DIR="$HOME/Pictures/wallpapers"
 PICTURES_DIR="$HOME/Pictures"
 DEFAULT_PICTURES_DIR="$REPO_DIR/default pictures"
 
+# ── ANSI Kleuren en Stijlen ────────────────────────────────────
+RESET="\033[0m"
+BOLD="\033[1m"
+GREEN="\033[32m"
+ORANGE="\033[33m"
+RED="\033[31m"
+
+SUCCESS="${BOLD}${GREEN}"
+WARNING="${BOLD}${ORANGE}"
+ERROR="${BOLD}${RED}"
 
 # ── detecteer of dit een eerste installatie of een update is ────
 
@@ -36,114 +45,109 @@ if [ -d "$REPO_DIR/.git" ]; then
     IS_UPDATE=true
 fi
 
-echo ""
-echo "╔══════════════════════════════════════╗"
+echo -e ""
+echo -e "╔══════════════════════════════════════╗"
 if $IS_UPDATE; then
-echo "║   QuickShell update                  ║"
+echo -e "║   QuickShell update                  ║"
 else
-echo "║   QuickShell installatie             ║"
+echo -e "║   QuickShell installatie             ║"
 fi
-echo "╚══════════════════════════════════════╝"
-echo ""
+echo -e "╚══════════════════════════════════════╝"
+echo -e ""
 
 # ── 1. package manager controleren ──────────────────────────────
 
 if ! command -v pacman &>/dev/null; then
-    echo "✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)"
+    echo -e "${ERROR}✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)${RESET}"
     exit 1
 fi
 
 # ── 2. git installeren ───────────────────────────────────────────
 
-echo ">>> Git installeren (indien nodig)..."
+echo -e ">>> Git installeren (indien nodig)..."
 
 if ! command -v git &>/dev/null; then
     sudo pacman -S --needed --noconfirm git
-    echo "✓ git geïnstalleerd"
+    echo -e "${SUCCESS}✓ git geïnstalleerd${RESET}"
 else
-    echo "✓ git is al geïnstalleerd"
+    echo -e "${SUCCESS}✓ git is al geïnstalleerd${RESET}"
 fi
 
 # ── 3. yay installeren ───────────────────────────────────────────
 
-echo ""
-echo ">>> Yay (AUR helper) installeren (indien nodig)..."
+echo -e ""
+echo -e ">>> Yay (AUR helper) installeren (indien nodig)..."
 
 if ! command -v yay &>/dev/null; then
-    # base-devel is een pacman groep, niet een commando — check met pacman -Qq
     if ! pacman -Qq base-devel &>/dev/null 2>&1; then
-        echo "  base-devel installeren..."
+        echo -e "  base-devel installeren..."
         sudo pacman -S --needed --noconfirm base-devel
     fi
 
-    # Bouw in /tmp zodat er geen rommel achterblijft
     YAY_BUILD_DIR="/tmp/yay-build"
     rm -rf "$YAY_BUILD_DIR"
     git clone https://aur.archlinux.org/yay.git "$YAY_BUILD_DIR"
 
-    # Subshell zodat cd de rest van het script niet beïnvloedt
     ( cd "$YAY_BUILD_DIR" && makepkg -si --noconfirm )
 
     rm -rf "$YAY_BUILD_DIR"
-    echo "✓ yay geïnstalleerd"
+    echo -e "${SUCCESS}✓ yay geïnstalleerd${RESET}"
 else
-    echo "✓ yay is al geïnstalleerd"
+    echo -e "${SUCCESS}✓ yay is al geïnstalleerd${RESET}"
 fi
 
 # ── 4. repo clonen of updaten ────────────────────────────────────
 
-echo ""
-echo ">>> Repo ophalen..."
+echo -e ""
+echo -e ">>> Repo ophalen..."
 
 if [ -d "$REPO_DIR/.git" ]; then
-    echo "  Repo updaten..."
+    echo -e "  Repo updaten..."
     git -C "$REPO_DIR" pull
-    echo "✓ Repo geüpdated"
+    echo -e "${SUCCESS}✓ Repo geüpdated${RESET}"
 else
     mkdir -p "$(dirname "$REPO_DIR")"
     git clone "$REPO_URL" "$REPO_DIR"
-    echo "✓ Repo gecloned naar $REPO_DIR"
+    echo -e "${SUCCESS}✓ Repo gecloned naar $REPO_DIR${RESET}"
 fi
 
 # ── 5. config mappen linken ──────────────────────────────────────
 
-echo ""
-echo ">>> Dotfiles koppelen..."
+echo -e ""
+echo -e ">>> Dotfiles koppelen..."
 
 for folder in "${FOLDERS[@]}"; do
     if [ -d "$REPO_DIR/$folder" ]; then
 
         mkdir -p "$CONFIG_DIR"
 
-        # Backup maken als het een echte map is (geen symlink)
         if [ -d "$CONFIG_DIR/$folder" ] && [ ! -L "$CONFIG_DIR/$folder" ]; then
             BACKUP="$CONFIG_DIR/${folder}_backup_$(date +%Y%m%d_%H%M%S)"
-            echo "  Backup gemaakt: $CONFIG_DIR/$folder → $BACKUP"
+            echo -e "  Backup gemaakt: $CONFIG_DIR/$folder → $BACKUP"
             mv "$CONFIG_DIR/$folder" "$BACKUP"
         fi
 
         ln -sf "$REPO_DIR/$folder" "$CONFIG_DIR/$folder"
-        echo "  ✓ Gekoppeld: $folder → $CONFIG_DIR/$folder"
+        echo -e "  ${SUCCESS}✓ Gekoppeld: $folder → $CONFIG_DIR/$folder${RESET}"
     else
-        echo "  ⚠ Map '$folder' niet gevonden in repo, overgeslagen"
+        echo -e "  ${WARNING}⚠ Map '$folder' niet gevonden in repo, overgeslagen${RESET}"
     fi
 done
 
-echo "✓ Dotfiles gekoppeld"
+echo -e "${SUCCESS}✓ Dotfiles gekoppeld${RESET}"
 
 # ── 6. scripts uitvoerbaar maken ─────────────────────────────────
 
-echo ""
-echo ">>> Scripts uitvoerbaar maken..."
+echo -e ""
+echo -e ">>> Scripts uitvoerbaar maken..."
 
-# Zoekt de hele repo door, alle submappen, onbeperkte diepte
 find "$REPO_DIR" -name "*.sh" -exec chmod +x {} +
-echo "✓ Alle .sh bestanden in de repo uitvoerbaar gemaakt"
+echo -e "${SUCCESS}✓ Alle .sh bestanden in de repo uitvoerbaar gemaakt${RESET}"
 
 # ── 7. sudoers regel voor shutdown ───────────────────────────────
 
-echo ""
-echo ">>> Sudoers instellen voor shutdown..."
+echo -e ""
+echo -e ">>> Sudoers instellen voor shutdown..."
 
 SUDOERS_BESTAND="/etc/sudoers.d/quickshell-shutdown"
 
@@ -151,101 +155,63 @@ if [ ! -f "$SUDOERS_BESTAND" ]; then
     echo "$USER ALL=(ALL) NOPASSWD: /usr/sbin/shutdown" \
         | sudo tee "$SUDOERS_BESTAND" > /dev/null
     sudo chmod 440 "$SUDOERS_BESTAND"
-    echo "✓ Sudoers regel toegevoegd"
+    echo -e "${SUCCESS}✓ Sudoers regel toegevoegd${RESET}"
 else
-    echo "✓ Sudoers regel bestaat al"
+    echo -e "${SUCCESS}✓ Sudoers regel bestaat al${RESET}"
 fi
 
 # ── 8. wallpaper map aanmaken (alleen bij eerste installatie) ────
 
 if ! $IS_UPDATE; then
-    echo ""
-    echo ">>> Wallpaper map aanmaken..."
+    echo -e ""
+    echo -e ">>> Wallpaper map aanmaken..."
 
     if [ ! -d "$WALLPAPER_DIR" ]; then
         mkdir -p "$WALLPAPER_DIR"
 
-        # Kopieer alleen losse afbeeldingen uit ~/Pictures (geen submappen)
-        # -maxdepth 1 voorkomt dat wallpapers zichzelf probeert te kopiëren
         mkdir -p "$PICTURES_DIR"
         COPIED=$(find "$DEFAULT_PICTURES_DIR" -maxdepth 1 -type f \
             \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \
-               -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.jxl" \) \
+               -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.bmp" \
+               -o -iname "*.tiff" -o -iname "*.qoi" -o -iname "*.ico" \) \
             -exec cp {} "$WALLPAPER_DIR/" \; -print | wc -l)
 
         if [ "$COPIED" -gt 0 ]; then
-            echo "  ✓ $COPIED foto('s) gekopieerd naar $WALLPAPER_DIR"
+            echo -e "  ${SUCCESS}✓ $COPIED foto('s) gekopieerd naar $WALLPAPER_DIR${RESET}"
         else
-            echo "  ⚠ Geen afbeeldingen gevonden in $PICTURES_DIR"
-            echo "    Voeg zelf wallpapers toe aan: $WALLPAPER_DIR"
+            echo -e "  ${WARNING}⚠ Geen afbeeldingen gevonden in $DEFAULT_PICTURES_DIR${RESET}"
+            echo -e "    Voeg zelf wallpapers toe aan: $WALLPAPER_DIR"
         fi
 
-        # Verwijder de originele Pictures map (haal # weg om te activeren)
-        # rm -rf "$DEFAULT_PICTURES"
-
-        echo "✓ Wallpaper map aangemaakt: $WALLPAPER_DIR"
+        echo -e "${SUCCESS}✓ Wallpaper map aangemaakt: $WALLPAPER_DIR${RESET}"
     else
-        echo "✓ Wallpaper map bestaat al, overgeslagen"
+        echo -e "${SUCCESS}✓ Wallpaper map bestaat al, overgeslagen${RESET}"
     fi
 fi
 
 # ── 9. systeem updaten & Qt-versie bijhouden ─────────────────────
-#
-#  QuickShell (AUR) is gecompileerd tegen Qt. Als Qt een major of
-#  minor versiesprong maakt (bijv. 6.7 → 6.8), werkt de bestaande
-#  binary niet meer goed. We slaan de Qt-versie op vóór de update
-#  en vergelijken daarna — als die verschilt, hercompileren we
-#  quickshell automatisch.
-# ─────────────────────────────────────────────────────────────────
 
-echo ""
-echo ">>> Systeem updaten..."
+echo -e ""
+echo -e ">>> Systeem updaten..."
 
-# Sla Qt-versie op vóór de update (major.minor, bijv. "6.7")
 QT_VERSION_VOOR=$(pacman -Q qt6-base 2>/dev/null | awk '{print $2}' | cut -d. -f1,2 || echo "niet-geinstalleerd")
 
-# Pacman systeem update
 sudo pacman -Syu --noconfirm
-echo "✓ Systeem geüpdated via pacman"
+echo -e "${SUCCESS}✓ Systeem geüpdated via pacman${RESET}"
 
-# Yay AUR update — quickshell wordt apart behandeld (zie stap 9)
 yay -Syu --noconfirm --ignore quickshell
-echo "✓ AUR pakketten geüpdated via yay"
+echo -e "${SUCCESS}✓ AUR pakketten geüpdated via yay${RESET}"
 
-# Sla Qt-versie op ná de update
 QT_VERSION_NA=$(pacman -Q qt6-base 2>/dev/null | awk '{print $2}' | cut -d. -f1,2 || echo "niet-geinstalleerd")
 
-echo ""
-echo "  Qt versie vóór update : $QT_VERSION_VOOR"
-echo "  Qt versie na update   : $QT_VERSION_NA"
+echo -e ""
+echo -e "  Qt versie vóór update : $QT_VERSION_VOOR"
+echo -e "  Qt versie na update   : $QT_VERSION_NA"
 
-# ── 10. hyprland herladen & hyprpaper starten ───────────────────
+# ── 10. packages installeren / quickshell hercompileren ───────────
 
-echo ""
-echo ">>> Hyprland herladen..."
-
-if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ] && command -v hyprctl &>/dev/null; then
-    hyprctl reload
-    echo "✓ Hyprland config herladen"
-
-    # Hyprpaper herstarten met nieuwe config
-    if command -v hyprpaper &>/dev/null; then
-        pkill hyprpaper 2>/dev/null || true
-        sleep 0.5
-        hyprpaper &
-        echo "✓ Hyprpaper gestart"
-    else
-        echo "  ⚠ hyprpaper niet gevonden, overgeslagen"
-    fi
-else
-    echo "  ⚠ Hyprland draait niet, reload overgeslagen"
-    echo "    Start Hyprland opnieuw om de nieuwe config te laden"
-fi
-
-# ── 11. packages installeren / quickshell hercompileren ───────────
-
-echo ""
-echo ">>> Packages controleren..."
+echo -e ""
+echo -e ">>> Packages controleren..."
 
 INSTALL_SCRIPT="$REPO_DIR/scripts/install_scripts/install-packages.sh"
 
@@ -253,27 +219,44 @@ if [ -f "$INSTALL_SCRIPT" ]; then
     chmod +x "$INSTALL_SCRIPT"
     bash "$INSTALL_SCRIPT"
 else
-    echo "  ⚠ install-packages.sh niet gevonden op: $INSTALL_SCRIPT"
-    echo "  Handmatig overgeslagen."
+    echo -e "  ${WARNING}⚠ install-packages.sh niet gevonden op: $INSTALL_SCRIPT${RESET}"
+    echo -e "  Handmatig overgeslagen."
 fi
 
-# Hercompileer quickshell als Qt-versie veranderd is
 if [ "$QT_VERSION_VOOR" != "$QT_VERSION_NA" ]; then
-    echo ""
-    echo ">>> Qt versie gewijzigd ($QT_VERSION_VOOR → $QT_VERSION_NA)"
-    echo "    QuickShell hercompileren tegen nieuwe Qt..."
+    echo -e ""
+    echo -e ">>> Qt versie gewijzigd ($QT_VERSION_VOOR → $QT_VERSION_NA)"
+    echo -e "    QuickShell hercompileren tegen nieuwe Qt..."
     yay -S --noconfirm --rebuild quickshell
-    echo "✓ QuickShell hergecompileerd"
+    echo -e "${SUCCESS}✓ QuickShell hergecompileerd${RESET}"
 else
-    # Gewone update als Qt niet veranderd is
     yay -S --noconfirm quickshell
-    echo "✓ QuickShell is up-to-date"
+    echo -e "${SUCCESS}✓ QuickShell is up-to-date${RESET}"
+fi
+
+# ── 11. hyprland herladen & awww starten ───────────────────
+
+echo -e ""
+echo -e ">>> Hyprland herladen & awww starten"
+
+if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ] && command -v hyprctl &>/dev/null; then
+    awww-daemon &
+    sleep 0.2
+
+    sh "$REPO_DIR/scripts/backgroundSwicher/change_wallpaper.sh" "$WALLPAPER_DIR/pincones.jpg"
+    echo -e "${SUCCESS}✓ Wallpaper ingesteld${RESET}"
+
+    hyprctl reload
+    echo -e "${SUCCESS}✓ Hyprland config herladen${RESET}"
+else
+    echo -e "  ${WARNING}⚠ Hyprland draait niet, reload overgeslagen${RESET}"
+    echo -e "    Start Hyprland opnieuw om de nieuwe config te laden"
 fi
 
 # ── 12. init systeem detecteren ──────────────────────────────────
 
-echo ""
-echo ">>> Init systeem detecteren..."
+echo -e ""
+echo -e ">>> Init systeem detecteren..."
 
 if [ "$(cat /proc/1/comm)" = "systemd" ]; then
     INIT="systemd"
@@ -299,25 +282,19 @@ mkdir -p "$QS_CONFIG_DIR"
 echo "init= $INIT"                         > "$QS_CONFIG_DIR/system_info.txt"
 echo "loginctl available= $HEEFT_LOGINCTL" >> "$QS_CONFIG_DIR/system_info.txt"
 
-echo "✓ Init systeem gedetecteerd: $INIT"
-echo "✓ loginctl beschikbaar: $HEEFT_LOGINCTL"
+echo -e "${SUCCESS}✓ Init systeem gedetecteerd: $INIT${RESET}"
+echo -e "${SUCCESS}✓ loginctl beschikbaar: $HEEFT_LOGINCTL${RESET}"
 
 # ── 13. klaar ────────────────────────────────────────────────────
 
-echo ""
+echo -e ""
 if $IS_UPDATE; then
-echo "╔══════════════════════════════════════╗"
-echo "║   Update klaar!                      ║"
-echo "╚══════════════════════════════════════╝"
+echo -e "╔══════════════════════════════════════╗"
+echo -e "║   Update klaar!                      ║"
+echo -e "╚══════════════════════════════════════╝"
 else
-echo "╔══════════════════════════════════════╗"
-echo "║   Installatie klaar!                 ║"
-echo "╚══════════════════════════════════════╝"
+echo -e "╔══════════════════════════════════════╗"
+echo -e "║   Installatie klaar!                 ║"
+echo -e "╚══════════════════════════════════════╝"
 fi
-echo ""
-echo "Start QuickShell met:"
-echo "  qs"
-echo ""
-echo "Of voeg dit toe aan je Hyprland config:"
-echo "  exec-once = qs"
-echo ""
+echo -e ""

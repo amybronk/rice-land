@@ -10,14 +10,12 @@ if command -v pacman &>/dev/null; then
         libnotify \
         vivaldi \
         kate \
-        rofi
+        rofi \
+        awww
     
     yay -S --noconfirm --rebuild --needed \
         quickshell \
-        matugen-bin \
-        hyprpaper
-
-    mkdir -p ~/.config/matugen/templates
+        matugen-bin 
 
     echo "✓ Packages geïnstalleerd via pacman and the aur"
 else
