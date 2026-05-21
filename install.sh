@@ -3,7 +3,7 @@
 # ═══════════════════════════════════════════════════════════════
 #  QuickShell installatie & update script
 #  Gebruik: bash install.sh
-#  repo: https://github.com/amybronk/myquickshellwidget.git
+#  repo: https://github.com/amybronk/rice-land.git
 #
 #  Dit script is veilig om meerdere keren te draaien.
 #  Het installeert bij de eerste keer, en update bij volgende keren.
@@ -159,23 +159,28 @@ fi
 if ! $IS_UPDATE; then
     echo ""
     echo ">>> Wallpaper map aanmaken..."
- 
+
     if [ ! -d "$WALLPAPER_DIR" ]; then
         mkdir -p "$WALLPAPER_DIR"
- 
-        # Kopieer alleen losse bestanden uit ~/Pictures (geen submappen)
+
+        # Kopieer alleen losse afbeeldingen uit ~/Pictures (geen submappen)
         # -maxdepth 1 voorkomt dat wallpapers zichzelf probeert te kopiëren
-        if [ -d "$DEFAULT_PICTURES" ]; then
-            find "$DEFAULT_PICTURES" -maxdepth 1 -type f \
-                \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \
-                   -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.jxl" \) \
-                -exec cp {} "$WALLPAPER_DIR/" \;
-            echo "  ✓ Bestaande fotos gekopieerd naar $WALLPAPER_DIR"
+        mkdir -p "$DEFAULT_PICTURES"
+        COPIED=$(find "$DEFAULT_PICTURES" -maxdepth 1 -type f \
+            \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \
+               -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.jxl" \) \
+            -exec cp {} "$WALLPAPER_DIR/" \; -print | wc -l)
+
+        if [ "$COPIED" -gt 0 ]; then
+            echo "  ✓ $COPIED foto('s) gekopieerd naar $WALLPAPER_DIR"
+        else
+            echo "  ⚠ Geen afbeeldingen gevonden in $DEFAULT_PICTURES"
+            echo "    Voeg zelf wallpapers toe aan: $WALLPAPER_DIR"
         fi
- 
+
         # Verwijder de originele Pictures map (haal # weg om te activeren)
         # rm -rf "$DEFAULT_PICTURES"
- 
+
         echo "✓ Wallpaper map aangemaakt: $WALLPAPER_DIR"
     else
         echo "✓ Wallpaper map bestaat al, overgeslagen"
@@ -212,7 +217,30 @@ echo ""
 echo "  Qt versie vóór update : $QT_VERSION_VOOR"
 echo "  Qt versie na update   : $QT_VERSION_NA"
 
-# ── 10. packages installeren / quickshell hercompileren ───────────
+# ── 10. hyprland herladen & hyprpaper starten ───────────────────
+
+echo ""
+echo ">>> Hyprland herladen..."
+
+if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ] && command -v hyprctl &>/dev/null; then
+    hyprctl reload
+    echo "✓ Hyprland config herladen"
+
+    # Hyprpaper herstarten met nieuwe config
+    if command -v hyprpaper &>/dev/null; then
+        pkill hyprpaper 2>/dev/null || true
+        sleep 0.5
+        hyprpaper &
+        echo "✓ Hyprpaper gestart"
+    else
+        echo "  ⚠ hyprpaper niet gevonden, overgeslagen"
+    fi
+else
+    echo "  ⚠ Hyprland draait niet, reload overgeslagen"
+    echo "    Start Hyprland opnieuw om de nieuwe config te laden"
+fi
+
+# ── 11. packages installeren / quickshell hercompileren ───────────
 
 echo ""
 echo ">>> Packages controleren..."
@@ -240,7 +268,7 @@ else
     echo "✓ QuickShell is up-to-date"
 fi
 
-# ── 11. init systeem detecteren ──────────────────────────────────
+# ── 12. init systeem detecteren ──────────────────────────────────
 
 echo ""
 echo ">>> Init systeem detecteren..."
@@ -272,7 +300,7 @@ echo "loginctl available= $HEEFT_LOGINCTL" >> "$QS_CONFIG_DIR/system_info.txt"
 echo "✓ Init systeem gedetecteerd: $INIT"
 echo "✓ loginctl beschikbaar: $HEEFT_LOGINCTL"
 
-# ── 12. klaar ────────────────────────────────────────────────────
+# ── 13. klaar ────────────────────────────────────────────────────
 
 echo ""
 if $IS_UPDATE; then

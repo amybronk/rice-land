@@ -8,6 +8,7 @@ if command -v pacman &>/dev/null; then
         qt6-declarative \
         git \
         libnotify \
+        vivaldi \
         rofi
     
     yay -S --noconfirm \
