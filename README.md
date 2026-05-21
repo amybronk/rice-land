@@ -20,8 +20,7 @@ sh install.sh
 │   ├── pincones.jpg
 │   └── pincones.jxl
 ├── hypr
-│   ├── hyprland.conf
-│   └── hyprpaper.conf
+│   └── hyprland.conf
 ├── install.sh
 ├── matugen
 │   ├── config.toml
@@ -85,8 +84,9 @@ sh install.sh
 ├── rofi
 │   └── config.rasi
 └── scripts
-    ├── background wicher
-    │   └── change_wallpaper.sh
+    ├── backgroundSwicher
+    │   ├── change_wallpaper.sh
+    │   └── init_wallpaper.sh
     ├── globoltheaming
     └── install_scripts
         └── install-packages.sh
