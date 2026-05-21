@@ -17,9 +17,11 @@ sh install.sh
 ```text
 .
 ├── default pictures
+│   ├── pincones.jpg
 │   └── pincones.jxl
 ├── hypr
-│   └── hyprland.conf
+│   ├── hyprland.conf
+│   └── hyprpaper.conf
 ├── install.sh
 ├── matugen
 │   ├── config.toml

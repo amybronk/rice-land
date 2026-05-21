@@ -9,11 +9,13 @@ if command -v pacman &>/dev/null; then
         git \
         libnotify \
         vivaldi \
+        kate \
         rofi
     
-    yay -S --noconfirm \
+    yay -S --noconfirm --rebuild --needed \
         quickshell \
-        matugen-bin
+        matugen-bin \
+        hyprpaper
 
     mkdir -p ~/.config/matugen/templates
 
