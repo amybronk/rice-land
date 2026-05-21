@@ -202,7 +202,7 @@ sudo pacman -Syu --noconfirm
 echo "✓ Systeem geüpdated via pacman"
 
 # Yay AUR update — quickshell wordt apart behandeld (zie stap 9)
-yay -Syu --noconfirm --exclude quickshell
+yay -Syu --noconfirm --ignore quickshell
 echo "✓ AUR pakketten geüpdated via yay"
 
 # Sla Qt-versie op ná de update
