@@ -30,7 +30,7 @@ DEFAULT_PICTURES="$HOME/Pictures"
 # ── detecteer of dit een eerste installatie of een update is ────
 
 IS_UPDATE=false
-if [ -d "$REPO_DIR/.git" ] && command -v yay &>/dev/null; then
+if [ -d "$REPO_DIR/.git" ]; then
     IS_UPDATE=true
 fi
 
@@ -114,7 +114,7 @@ for folder in "${FOLDERS[@]}"; do
         mkdir -p "$CONFIG_DIR"
 
         # Backup maken als het een echte map is (geen symlink)
-        if [ -e "$CONFIG_DIR/$folder" ] && [ ! -L "$CONFIG_DIR/$folder" ]; then
+        if [ -d "$CONFIG_DIR/$folder" ] && [ ! -L "$CONFIG_DIR/$folder" ]; then
             BACKUP="$CONFIG_DIR/${folder}_backup_$(date +%Y%m%d_%H%M%S)"
             echo "  Backup gemaakt: $CONFIG_DIR/$folder → $BACKUP"
             mv "$CONFIG_DIR/$folder" "$BACKUP"
