@@ -168,13 +168,13 @@ if ! $IS_UPDATE; then
     echo -e ""
     echo -e "${BLUE}>>> user mapen aanmaken...${RESET}"
 
-    mkdir -p "$xdg_MUSIC_DIR/"
-    mkdir -p "$xdg_PICTURES_DIR/"
-    mkdir -p "$xdg_VIDEOS_DIR/"
-    mkdir -p "$xdg_DOWNLOAD_DIR/"
-    mkdir -p "$xdg_DESKTOP_DIR/"
-    mkdir -p "$xdg_TEMPLATES_DIR/"
-    mkdir -p "$xdg_DOCUMENTS_DIR/"
+    mkdir -p "$HOME/Music"
+    mkdir -p "$HOME/Pictures"
+    mkdir -p "$HOME/Videos"
+    mkdir -p "$HOME/Downloads"
+    mkdir -p "$HOME/Desktop"
+    mkdir -p "$HOME/Templates"
+    mkdir -p "$HOME/Documents"
 
     echo -e ""
     echo -e "${SUCCESS}✓ Wallpaper mapen aangemaaked${RESET}"
@@ -241,9 +241,9 @@ fi
 if [ "$QT_VERSION_VOOR" != "$QT_VERSION_NA" ]; then
     echo -e ""
     echo -e ">>> Qt versie gewijzigd ($QT_VERSION_VOOR → $QT_VERSION_NA)"
-    echo -e "    QuickShell hercompileren tegen nieuwe Qt..."
+    echo -e "    QuickShell forceren om opnieuw te installeren tegen nieuwe Qt..."
     yay -S --noconfirm --rebuild quickshell
-    echo -e "${SUCCESS}✓ QuickShell hergecompileerd${RESET}"
+    echo -e "${SUCCESS}✓ QuickShell opnieuw geïnstalleerd${RESET}"
 else
     yay -S --noconfirm quickshell
     echo -e "${SUCCESS}✓ QuickShell is up-to-date${RESET}"
@@ -294,8 +294,8 @@ else
 fi
 
 mkdir -p "$QS_CONFIG_DIR"
-echo "${BLUE}init= $INIT"                         > "$QS_CONFIG_DIR/system_info.txt ${RESET}"
-echo "${BLUE}loginctl available= $HEEFT_LOGINCTL" >> "$QS_CONFIG_DIR/system_info.txt ${RESET}"
+echo "init= $INIT" > "$QS_CONFIG_DIR/system_info.txt"
+echo "loginctl available= $HEEFT_LOGINCTL" >> "$QS_CONFIG_DIR/system_info.txt"
 
 echo -e "${SUCCESS}✓ Init systeem gedetecteerd: $INIT${RESET}"
 echo -e "${SUCCESS}✓ loginctl beschikbaar: $HEEFT_LOGINCTL${RESET}"
@@ -305,7 +305,7 @@ echo -e "${SUCCESS}✓ loginctl beschikbaar: $HEEFT_LOGINCTL${RESET}"
 echo -e ""
 echo -e "${BLUE}>>> Starting installd apps...${RESET}"
 
-QS
+QS &
 
 chsh -s /usr/bin/fish
 
