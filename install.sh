@@ -20,7 +20,7 @@ QS_CONFIG_DIR="$CONFIG_DIR/quickshell"
 REPO_DIR="$HOME/.local/share/quickshell-dotfiles"
 
 # Lijst met mappen die je wilt linken naar ~/.config
-FOLDERS=("quickshell" "hypr" "rofi" "matugen" "alacritty")
+FOLDERS=("quickshell" "hypr" "rofi" "matugen" "alacritty" "fastfetch" "fish")
 
 # Wallpaper mappen
 WALLPAPER_DIR="$HOME/Pictures/wallpapers"
@@ -166,6 +166,21 @@ fi
 
 if ! $IS_UPDATE; then
     echo -e ""
+    echo -e "${BLUE}>>> user mapen aanmaken...${RESET}"
+
+    mkdir -p "$xdg_MUSIC_DIR"
+    mkdir -p "$xdg_PICTURES_DIR"
+    mkdir -p "$xdg_VIDEOS_DIR"
+    mkdir -p "$xdg_DOWNLOAD_DIR"
+    mkdir -p "$xdg_DESKTOP_DIR"
+    mkdir -p "$xdg_TEMPLATES_DIR"
+    mkdir -p "$xdg_DOCUMENTS_DIR"
+    mkdir -p "$xdg_DATA_home/fonts"
+    mkdir -p "$xdg_DATA_home/icons"
+
+    echo -e ""
+    echo -e "${SUCCESS}✓ Wallpaper mapen aangemaaked${RESET}"
+    echo -e ""
     echo -e "${BLUE}>>> Wallpaper map aanmaken...${RESET}"
 
     if [ ! -d "$WALLPAPER_DIR" ]; then
@@ -287,7 +302,18 @@ echo "${BLUE}loginctl available= $HEEFT_LOGINCTL" >> "$QS_CONFIG_DIR/system_info
 echo -e "${SUCCESS}✓ Init systeem gedetecteerd: $INIT${RESET}"
 echo -e "${SUCCESS}✓ loginctl beschikbaar: $HEEFT_LOGINCTL${RESET}"
 
-# ── 13. klaar ────────────────────────────────────────────────────
+# ── 13. Starting installd apps ────────────────────────────────────────────────────
+
+echo -e ""
+echo -e "${BLUE}>>> Starting installd apps...${RESET}"
+
+QS
+
+chsh -s /usr/bin/fish
+
+echo -e ""
+
+# ── 14. klaar ────────────────────────────────────────────────────
 
 echo -e "${BOLDBLUE}"
 if $IS_UPDATE; then

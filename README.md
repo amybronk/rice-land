@@ -18,16 +18,27 @@ sh install.sh
 ├── alacritty
 │   └── alacritty.toml
 ├── default pictures
-│   ├── pincones.jpg
-│   └── pincones.jxl
+│   ├── burbfood.jpg
+│   ├── flinder.jpg
+│   ├── kastel.jpg
+│   └── pincones.jpg
+├── fastfetch
+│   ├── config.jsonc
+│   └── fech_icons
+│       ├── arch1.txt
+│       ├── arch.txt
+│       ├── f.txt
+│       └── space.txt
+├── fish
+│   └── config.fish
 ├── hypr
 │   └── hyprland.conf
 ├── install.sh
 ├── matugen
 │   ├── config.toml
 │   └── templates
+│       ├── alacritty.toml
 │       ├── colors.qml
-│       ├── colors.toml
 │       ├── hyprland_colors.conf
 │       └── rofi.rasi
 ├── notes
