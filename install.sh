@@ -20,7 +20,7 @@ QS_CONFIG_DIR="$CONFIG_DIR/quickshell"
 REPO_DIR="$HOME/.local/share/quickshell-dotfiles"
 
 # Lijst met mappen die je wilt linken naar ~/.config
-FOLDERS=("quickshell" "hypr" "rofi" "matugen")
+FOLDERS=("quickshell" "hypr" "rofi" "matugen" "alacritty")
 
 # Wallpaper mappen
 WALLPAPER_DIR="$HOME/Pictures/wallpapers"
@@ -33,7 +33,9 @@ BOLD="\033[1m"
 GREEN="\033[32m"
 ORANGE="\033[33m"
 RED="\033[31m"
+BLUE="\033[34m"
 
+BOLDBLUE="${BOLD}${BLUE}"
 SUCCESS="${BOLD}${GREEN}"
 WARNING="${BOLD}${ORANGE}"
 ERROR="${BOLD}${RED}"
@@ -45,7 +47,7 @@ if [ -d "$REPO_DIR/.git" ]; then
     IS_UPDATE=true
 fi
 
-echo -e ""
+echo -e "${BOLDBLUE}"
 echo -e "╔══════════════════════════════════════╗"
 if $IS_UPDATE; then
 echo -e "║   QuickShell update                  ║"
@@ -53,7 +55,7 @@ else
 echo -e "║   QuickShell installatie             ║"
 fi
 echo -e "╚══════════════════════════════════════╝"
-echo -e ""
+echo -e "${RESET}"
 
 # ── 1. package manager controleren ──────────────────────────────
 
@@ -64,7 +66,7 @@ fi
 
 # ── 2. git installeren ───────────────────────────────────────────
 
-echo -e ">>> Git installeren (indien nodig)..."
+echo -e "${BLUE}>>> Git installeren (indien nodig)...${RESET}"
 
 if ! command -v git &>/dev/null; then
     sudo pacman -S --needed --noconfirm git
@@ -76,7 +78,7 @@ fi
 # ── 3. yay installeren ───────────────────────────────────────────
 
 echo -e ""
-echo -e ">>> Yay (AUR helper) installeren (indien nodig)..."
+echo -e "${BLUE}>>> Yay (AUR helper) installeren (indien nodig)...${RESET}"
 
 if ! command -v yay &>/dev/null; then
     if ! pacman -Qq base-devel &>/dev/null 2>&1; then
@@ -99,7 +101,7 @@ fi
 # ── 4. repo clonen of updaten ────────────────────────────────────
 
 echo -e ""
-echo -e ">>> Repo ophalen..."
+echo -e "${BLUE}>>> Repo ophalen...${RESET}"
 
 if [ -d "$REPO_DIR/.git" ]; then
     echo -e "  Repo updaten..."
@@ -114,7 +116,7 @@ fi
 # ── 5. config mappen linken ──────────────────────────────────────
 
 echo -e ""
-echo -e ">>> Dotfiles koppelen..."
+echo -e "${BLUE}>>> Dotfiles koppelen...${RESET}"
 
 for folder in "${FOLDERS[@]}"; do
     if [ -d "$REPO_DIR/$folder" ]; then
@@ -139,7 +141,7 @@ echo -e "${SUCCESS}✓ Dotfiles gekoppeld${RESET}"
 # ── 6. scripts uitvoerbaar maken ─────────────────────────────────
 
 echo -e ""
-echo -e ">>> Scripts uitvoerbaar maken..."
+echo -e "${BLUE}>>> Scripts uitvoerbaar maken...${RESET}"
 
 find "$REPO_DIR" -name "*.sh" -exec chmod +x {} +
 echo -e "${SUCCESS}✓ Alle .sh bestanden in de repo uitvoerbaar gemaakt${RESET}"
@@ -147,7 +149,7 @@ echo -e "${SUCCESS}✓ Alle .sh bestanden in de repo uitvoerbaar gemaakt${RESET}
 # ── 7. sudoers regel voor shutdown ───────────────────────────────
 
 echo -e ""
-echo -e ">>> Sudoers instellen voor shutdown..."
+echo -e "${BLUE}>>> Sudoers instellen voor shutdown...${RESET}"
 
 SUDOERS_BESTAND="/etc/sudoers.d/quickshell-shutdown"
 
@@ -164,7 +166,7 @@ fi
 
 if ! $IS_UPDATE; then
     echo -e ""
-    echo -e ">>> Wallpaper map aanmaken..."
+    echo -e "${BLUE}>>> Wallpaper map aanmaken...${RESET}"
 
     if [ ! -d "$WALLPAPER_DIR" ]; then
         mkdir -p "$WALLPAPER_DIR"
@@ -192,7 +194,7 @@ fi
 # ── 9. systeem updaten & Qt-versie bijhouden ─────────────────────
 
 echo -e ""
-echo -e ">>> Systeem updaten..."
+echo -e "${BLUE}>>> Systeem updaten...${RESET}"
 
 QT_VERSION_VOOR=$(pacman -Q qt6-base 2>/dev/null | awk '{print $2}' | cut -d. -f1,2 || echo "niet-geinstalleerd")
 
@@ -205,13 +207,13 @@ echo -e "${SUCCESS}✓ AUR pakketten geüpdated via yay${RESET}"
 QT_VERSION_NA=$(pacman -Q qt6-base 2>/dev/null | awk '{print $2}' | cut -d. -f1,2 || echo "niet-geinstalleerd")
 
 echo -e ""
-echo -e "  Qt versie vóór update : $QT_VERSION_VOOR"
-echo -e "  Qt versie na update   : $QT_VERSION_NA"
+echo -e "${BLUE}  Qt versie vóór update : $QT_VERSION_VOOR${RESET}"
+echo -e "${BLUE}  Qt versie na update   : $QT_VERSION_NA${RESET}"
 
 # ── 10. packages installeren / quickshell hercompileren ───────────
 
 echo -e ""
-echo -e ">>> Packages controleren..."
+echo -e "${BLUE}>>> Packages controleren...${RESET}"
 
 INSTALL_SCRIPT="$REPO_DIR/scripts/install_scripts/install-packages.sh"
 
@@ -237,7 +239,7 @@ fi
 # ── 11. hyprland herladen & awww starten ───────────────────
 
 echo -e ""
-echo -e ">>> Hyprland herladen & awww starten"
+echo -e "${BLUE}>>> Hyprland herladen & awww starten${RESET}"
 
 if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ] && command -v hyprctl &>/dev/null; then
     awww-daemon &
@@ -256,7 +258,7 @@ fi
 # ── 12. init systeem detecteren ──────────────────────────────────
 
 echo -e ""
-echo -e ">>> Init systeem detecteren..."
+echo -e "${BLUE}>>> Init systeem detecteren...${RESET}"
 
 if [ "$(cat /proc/1/comm)" = "systemd" ]; then
     INIT="systemd"
@@ -279,15 +281,15 @@ else
 fi
 
 mkdir -p "$QS_CONFIG_DIR"
-echo "init= $INIT"                         > "$QS_CONFIG_DIR/system_info.txt"
-echo "loginctl available= $HEEFT_LOGINCTL" >> "$QS_CONFIG_DIR/system_info.txt"
+echo "${BLUE}init= $INIT"                         > "$QS_CONFIG_DIR/system_info.txt ${RESET}"
+echo "${BLUE}loginctl available= $HEEFT_LOGINCTL" >> "$QS_CONFIG_DIR/system_info.txt ${RESET}"
 
 echo -e "${SUCCESS}✓ Init systeem gedetecteerd: $INIT${RESET}"
 echo -e "${SUCCESS}✓ loginctl beschikbaar: $HEEFT_LOGINCTL${RESET}"
 
 # ── 13. klaar ────────────────────────────────────────────────────
 
-echo -e ""
+echo -e "${BOLDBLUE}"
 if $IS_UPDATE; then
 echo -e "╔══════════════════════════════════════╗"
 echo -e "║   Update klaar!                      ║"
@@ -297,4 +299,4 @@ echo -e "╔══════════════════════�
 echo -e "║   Installatie klaar!                 ║"
 echo -e "╚══════════════════════════════════════╝"
 fi
-echo -e ""
+echo -e "${RESET}"

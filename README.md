@@ -15,6 +15,8 @@ sh install.sh
 <!-- TREE_START -->
 ```text
 .
+├── alacritty
+│   └── alacritty.toml
 ├── default pictures
 │   ├── pincones.jpg
 │   └── pincones.jxl
@@ -25,6 +27,7 @@ sh install.sh
 │   ├── config.toml
 │   └── templates
 │       ├── colors.qml
+│       ├── colors.toml
 │       ├── hyprland_colors.conf
 │       └── rofi.rasi
 ├── notes

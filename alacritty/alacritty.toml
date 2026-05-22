@@ -1,0 +1,9 @@
+# Importeer hier je kleurenschema
+import = ["~/.config/alacritty/color.toml"]
+
+# De rest van je normale instellingen (bijv. lettertype, window, etc.)
+[window]
+padding = { x = 10, y = 10 }
+
+[font]
+size = 11.0
