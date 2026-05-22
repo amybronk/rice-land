@@ -13,3 +13,7 @@ output_path = '~/.config/quickshell/colors.qml' # Pas aan naar waar jouw Quicksh
 [templates.hyprland]
 input_path = '~/.config/matugen/templates/hyprland_colors.conf'
 output_path = '~/.config/hypr/colors.conf'
+
+[templates.alacritty]
+input_path = '~/.config/matugen/templates/alacritty.toml'
+output_path = '~/.config/alacritty/color.toml'

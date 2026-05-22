@@ -1,0 +1,20 @@
+[colors.primary]
+background = '{{colors.surface.hex}}'
+foreground = '{{colors.on_surface.hex}}'
+
+[colors.cursor]
+text = '{{colors.surface.hex}}'
+cursor = '{{colors.primary.hex}}'
+
+[colors.normal]
+black   = '{{colors.surface_container_highest.hex}}'
+red     = '{{colors.error.hex}}'
+green   = '{{colors.primary.hex}}' # Of kies een andere specifieke accentkleur
+yellow  = '{{colors.tertiary.hex}}'
+blue    = '{{colors.secondary.hex}}'
+magenta = '{{colors.inverse_primary.hex}}'
+cyan    = '{{colors.outline.hex}}'
+white   = '{{colors.on_surface_variant.hex}}'
+
+[colors.primary_container]
+# Je kunt hier ook de container-kleuren toevoegen als je wilt

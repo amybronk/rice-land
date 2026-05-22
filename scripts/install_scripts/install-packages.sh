@@ -1,5 +1,15 @@
 #!/bin/bash
 
+RESET="\033[0m"
+BOLD="\033[1m"
+GREEN="\033[32m"
+ORANGE="\033[33m"
+RED="\033[31m"
+
+SUCCESS="${BOLD}${GREEN}"
+WARNING="${BOLD}${ORANGE}"
+ERROR="${BOLD}${RED}"
+
 # detecteer package manager
 if command -v pacman &>/dev/null; then
     sudo pacman -S --needed --noconfirm \
@@ -11,14 +21,15 @@ if command -v pacman &>/dev/null; then
         vivaldi \
         kate \
         rofi \
-        awww
+        awww \
+        alacritty
     
     yay -S --noconfirm --rebuild --needed \
         quickshell \
         matugen-bin 
 
-    echo "✓ Packages geïnstalleerd via pacman and the aur"
+    echo "${SUCCESS}✓ Packages geïnstalleerd via pacman and the aur${RESET}"
 else
-    echo "✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)"
+    echo "${WARNING}✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)${RESET}"
     exit 1
 fi

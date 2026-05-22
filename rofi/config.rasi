@@ -1,13 +1,10 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- * Rofi Dynamisch Material You Thema (Matugen)
+ * Rofi Dynamisch Material You Thema (Matugen) - Gecorrigeerde Syntax
  * ═══════════════════════════════════════════════════════════════
  */
 
-/* 1. Belangrijk: Importeer de kleuren die Matugen genereert */
-@import "~/.config/rofi/matugen-colors.rasi";
-
-/* 2. Algemene Rofi Instellingen */
+/* 1. Het configuration block MOET altijd als allereerste beginnen */
 configuration {
     modi:                       "drun,run,filebrowser";
     show-icons:                 true;
@@ -18,11 +15,13 @@ configuration {
     window-format:              "{w} · {c} · {t}";
 }
 
+/* 2. Pas DAARNA mag de import van Matugen komen */
+@import "~/.config/rofi/matugen-colors.rasi";
+
 /* 3. Globale Variabelen koppelen aan Matugen */
 * {
     font:                        "JetBrainsMono Nerd Font 10";
     
-    /* We mappen de Rofi-kleuren direct aan de Matugen output */
     background:                  @surface;
     foreground:                  @on-surface;
     accent:                      @primary;
@@ -47,7 +46,7 @@ window {
     padding:                     0px;
     border:                      2px solid;
     border-radius:               12px;
-    border-color:                @accent; /* Rand krijgt de accentkleur */
+    border-color:                @accent;
     background-color:            @background;
     cursor:                      "default";
 }
@@ -104,7 +103,7 @@ listview {
     background-color:            transparent;
 }
 
-/* 8. De Individuele Regels (Entries) — HIER ZIT DE FIX VOOR HET CONTRAST */
+/* 8. De Individuele Regels (Entries) */
 element {
     enabled:                     true;
     spacing:                     10px;
@@ -114,22 +113,19 @@ element {
     cursor:                      pointer;
 }
 
-/* Normale rijen */
 element normal.normal {
     background-color:            transparent;
     text-color:                  @foreground;
 }
 
-/* De afwisselende rijen maken we transparent om de witte vlekken te fixen! */
 element alternate.normal {
     background-color:            transparent; 
     text-color:                  @foreground;
 }
 
-/* Geselecteerde rij (waar je met je pijltjes op staat) */
 element selected.normal {
-    background-color:            @accent;      /* Krijgt de primaire Matugen kleur */
-    text-color:                  @accent-text; /* Krijgt de contrasterende tekstkleur */
+    background-color:            @accent;      
+    text-color:                  @accent-text; 
 }
 
 /* Icoontjes en tekst binnen de regels */
