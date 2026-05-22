@@ -8,7 +8,7 @@ output_path = '~/.config/rofi/matugen-colors.rasi'
 
 [templates.quickshell]
 input_path = '~/.config/matugen/templates/QuickshellColors.qml'
-output_path = '~/.config/quickshell/Colors.qml' # Pas aan naar waar jouw Quickshell setup staat
+output_path = '~/.config/quickshell/Colors.qml'
 
 [templates.hyprland]
 input_path = '~/.config/matugen/templates/hyprland_colors.conf'
