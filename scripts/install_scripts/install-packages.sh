@@ -13,17 +13,18 @@ ERROR="${BOLD}${RED}"
 # detecteer package manager
 if command -v pacman &>/dev/null; then
     sudo pacman -S --needed --noconfirm \
+        libnotify \
+        libjxl \
         hyprland \
         qt5-graphicaleffects \
         qt6-declarative \
         git \
-        libnotify \
         vivaldi \
         kate \
         rofi \
         awww \
         alacritty \
-        fasfech \
+        fastfetch \
         fish \
         starship \
         eza \
@@ -41,6 +42,6 @@ if command -v pacman &>/dev/null; then
 
     echo "${SUCCESS}✓ Packages geïnstalleerd via pacman and the aur${RESET}"
 else
-    echo "${WARNING}✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)${RESET}"
+    echo "${ERROR}✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)${RESET}"
     exit 1
 fi
