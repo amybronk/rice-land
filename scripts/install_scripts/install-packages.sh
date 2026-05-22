@@ -22,7 +22,18 @@ if command -v pacman &>/dev/null; then
         kate \
         rofi \
         awww \
-        alacritty
+        alacritty \
+        fasfech \
+        fish \
+        starship \
+        eza \
+        bat \
+        ugrep \
+        reflector \
+        expac \
+        hwinfo \
+        meld \
+        micro
     
     yay -S --noconfirm --rebuild --needed \
         quickshell \

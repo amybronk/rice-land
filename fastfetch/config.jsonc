@@ -1,0 +1,155 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "source": "fech_icons/arch1.txt",
+    "type": "file",
+    "width": 20,
+    "color": {
+      "1": "#5BCEFA",
+      "2": "#F5A9B8",
+      "3": "#ffffff",
+      "4": "#D52D00",
+      "5": "#EF7627",
+      "6": "#FF9A56",
+      "7": "#D162A4",
+      "8": "#B55690",
+      "9": "#A30262"
+    },
+    "padding": {
+            "top": 5,
+            "left": 2,
+            "right": 0
+    }
+  },
+  "display": {
+    "separator": " ",
+    "color": {
+      "output": "#5BCEFA"
+    }
+    
+  },
+  "modules": [
+    {
+      "type": "title",
+      "keyWidth": 10,
+      "keyColor": "#F5A9B8"
+    },
+    {
+      "type": "os",
+      "key": " OS",
+      "keyColor": "#EF7627",
+      "outputColor": "#5BCEFA"
+    },
+    {
+      "type": "kernel",
+      "key": "├ Kernel",
+      "keyColor": "#EF7627",
+      "outputColor": "#5BCEFA"
+    },
+    {
+      "type": "packages",
+      "key": "├󰏖 Packages",
+      "keyColor": "#EF7627",
+      "outputColor": "#5BCEFA"
+    },
+    {
+      "type": "shell",
+      "key": "├ Shell",
+      "keyColor": "#EF7627",
+      "outputColor": "#5BCEFA"
+    },
+    {
+      "type": "uptime",
+      "key": "├ uptime",
+      "keyColor": "#EF7627",
+      "outputColor": "#5BCEFA"
+    },
+    {
+      "type": "command",
+      "key": "└ Age",
+      "keyColor": "#EF7627",
+      "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days",
+      "outputColor": "#5BCEFA"
+    },
+    "break",
+    {
+      "type": "de",
+      "key": " DE",
+      "keyColor": "#D52D00"
+    },
+    {
+      "type": "wm",
+      "key": "├󰧨 Window Manager",
+      "keyColor": "#D52D00"
+    },
+    {
+      "type": "lm",
+      "key": "├󰧨 Login Manager",
+      "keyColor": "#D52D00"
+    },
+    {
+      "type": "wmtheme",
+      "key": "├󰉼 WM Theme",
+      "keyColor": "#D52D00"
+    },
+    {
+      "type": "theme",
+      "format": "{1}",
+      "key": "├󰉼 Color Themes",
+      "keyColor": "#D52D00"
+    },
+    {
+      "type": "icons",
+      "format": "{1}",
+      "key": "├󰀻 System Icons",
+      "keyColor": "#D52D00"
+    },
+    {
+      "type": "font",
+      "format": "{?1}{1} [Qt]{?}{/1}Unknown",
+      "key": "├ System Fonts",
+      "keyColor": "#D52D00"
+    },
+    {
+      "type": "terminal",
+      "key": "└ Terminal",
+      "keyColor": "#D52D00"
+    },
+    "break",
+    {
+      "type": "chassis",
+      "key": "󰌢 PC",
+      "keyColor": "#A30262"
+    },
+    {
+      "type": "cpu",
+      "key": "├󰻠 CPU",
+      "keyColor": "#A30262"
+    },
+    {
+      "type": "gpu",
+      "key": "├󰍛 GPU",
+      "keyColor": "#A30262"
+    },
+    {
+      "type": "Memory",
+      "key": "├󰘚 RAM",
+      "keyColor": "#A30262"
+    },
+    {
+      "type": "display",
+      "key": "├󰍹 Display(s)",
+      "keyColor": "#A30262"
+    },
+    {
+      "type": "opengl",
+      "key": "├󰍛 OpenGL",
+      "keyColor": "#A30262"
+    },
+    {
+      "type": "vulkan",
+      "key": "└󰍛 Vulkan",
+      "keyColor": "#A30262"
+    }
+  ]
+}

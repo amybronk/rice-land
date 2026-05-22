@@ -1,5 +1,5 @@
 # Importeer hier je kleurenschema
-import = ["~/.config/alacritty/color.toml"]
+general.import = ["~/.config/alacritty/color.toml"]
 
 # De rest van je normale instellingen (bijv. lettertype, window, etc.)
 [window]
