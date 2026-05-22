@@ -1,14 +1,7 @@
-element normal.normal {
-    background-color: transparent;
-    text-color:       @foreground; /* Of de matugen variabele */
-}
-
-element alternate.normal {
-    background-color: transparent; /* Dit haalt die lichte balken weg! */
-    text-color:       @foreground;
-}
-
-element selected.normal {
-    background-color: @selected-active-background; /* De kleur van je actieve balk (zoals dolphin nu) */
-    text-color:       @background; /* Zorgt voor goed contrast als je eroverheen hovert */
+/* Dit is de template waar Matugen de echte kleuren invult */
+* {
+    surface:      #{{colors.surface.default.hex_stripped}};
+    on-surface:   #{{colors.on_surface.default.hex_stripped}};
+    primary:      #{{colors.primary.default.hex_stripped}};
+    on-primary:   #{{colors.on_primary.default.hex_stripped}};
 }
