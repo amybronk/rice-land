@@ -34,11 +34,13 @@ if command -v pacman &>/dev/null; then
         expac \
         hwinfo \
         meld \
-        micro
+        micro \
+        discord
     
     yay -S --noconfirm --rebuild --needed \
         quickshell \
-        matugen-bin 
+        matugen-bin \
+        spotify-launcher
 
     echo "${SUCCESS}✓ Packages geïnstalleerd via pacman and the aur${RESET}"
 else
