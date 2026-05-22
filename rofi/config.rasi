@@ -16,7 +16,7 @@ configuration {
 }
 
 /* 2. Pas DAARNA mag de import van Matugen komen */
-@import "~/.config/rofi/matugen-colors.rasi";
+@import "~/.config/rofi/matugen-colors.rasi"
 
 /* 3. Globale Variabelen koppelen aan Matugen */
 * {

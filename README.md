@@ -38,8 +38,8 @@ sh install.sh
 │   ├── config.toml
 │   └── templates
 │       ├── alacritty.toml
-│       ├── colors.qml
 │       ├── hyprland_colors.conf
+│       ├── QuickshellColors.qml
 │       └── rofi.rasi
 ├── notes
 │   ├── dir.md

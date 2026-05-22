@@ -132,8 +132,9 @@ alias vdir 'vdir --color=auto'
 alias wget 'wget -c '
 
 # Personal aliases
-alias fsc 'micro ~/.config/fish/config.fish'
-alias fetch 'echo "config at ~/.config/fastfetch/config.jsonc  or  default config at /usr/share/fastfetch/presets/mokka.jsonc "'
+alias fsc     'micro ~/.config/fish/config.fish'
+alias fetch   'echo "config at ~/.config/fastfetch/config.jsonc  or  default config at /usr/share/fastfetch/presets/mokka.jsonc "'
+alias bgc     'sh ~/.local/share/quickshell-dotfiles/scripts/backgroundSwicher/change_wallpaper.sh'
 
 # Get fastest mirrors (Reflector)
 alias mirror 'sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist'

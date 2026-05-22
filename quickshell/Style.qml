@@ -53,25 +53,32 @@ Item {
         styleSettings.setValue(key, value)
     }
 
-    // --- COLOUR ---
-    property color achtergrondKleur: getSetting("achtergrondKleur", '#d31f1f1f')
-    property color popupAchtergrondKleur: getSetting("popupAchtergrondKleur", '#eb2b2b2b')
-    property color borderKleur: getSetting("borderKleur", '#daaa00a4')
-    property color accentKleur: getSetting("accentKleur", '#520050')
+    // --- COLOUR & MATUGEN INTEGRATION---
+    property color basisAchtergrondKleur: getSetting("basisAchtergrondKleur", Kleuren.background)
+    property color achtergrondKleur: Qt.rgba(basisAchtergrondKleur.r, basisAchtergrondKleur.g, basisAchtergrondKleur.b, (achtergrondTransparantie / 100.0))
 
-    property color textKleur: getSetting("textKleur", '#ffffffff')
-    property color textColourLink: getSetting("textColourLink", '#ff00d0')
-    property color negatiefTextKleur: getSetting("negatiefTextKleur", '#ff000000')
+    property color popupAchtergrondKleur: getSetting("popupAchtergrondKleur", Kleuren.surface)
+    property color borderKleur: getSetting("borderKleur", Kleuren.outline)
+    property color accentKleur: getSetting("accentKleur", Kleuren.primary)
 
-    property color actiefWerkbaldKleur: getSetting("actiefWerkbaldKleur", '#ff0000')
-    property color volleWerkbaldKleur: getSetting("volleWerkbaldKleur", '#3d0000')
-    property color legeWerkbaldKleur: getSetting("legeWerkbaldKleur", '#ffffff')
+    property color textKleur: getSetting("textKleur", Kleuren.on_background)
+    property color textColourLink: getSetting("textColourLink", Kleuren.tertiary)      // Handig voor linkjes
+    property color negatiefTextKleur: getSetting("negatiefTextKleur", Kleuren.on_primary) // Donkere tekst voor op lichte vlakken
 
-    property color colourPowerButton: getSetting("colourPowerButton", '#ff6cf5')
-    property color colourAppPalet: getSetting("colourAppPalet", '#70e2ff')
-    property color colourSettingsButton: getSetting("colourSettingsButton", '#6cff67')
+    // Werkbladen (Workspaces)
+    property color actiefWerkbaldKleur: getSetting("actiefWerkbaldKleur", Kleuren.primary)
+    property color volleWerkbaldKleur: getSetting("volleWerkbaldKleur", Kleuren.primary_container)
+    property color legeWerkbaldKleur: getSetting("legeWerkbaldKleur", Kleuren.surface_variant)
 
-    // --- INT ---
+    // Specifieke Knoppen
+    property color colourPowerButton: getSetting("colourPowerButton", Kleuren.error) // Gebruikt de Matugen 'error' (rood/roze) tint
+    property color colourAppPalet: getSetting("colourAppPalet", Kleuren.secondary)
+    property color colourSettingsButton: getSetting("colourSettingsButton", Kleuren.secondary_container)
+
+    // --- INT & TRANSPARENCY ---
+    // Instelling voor de achtergrond: 0 = onzichtbaar, 100 = volledig effen
+    property int achtergrondTransparantie: getSetting("achtergrondTransparantie", 85)
+
     property int barHoogte: getSetting("barHoogte", 35)
     property int barbuttonlengt: getSetting("barbuttonlengt", 60)
     property int mediaBorderSize: getSetting("mediaBorderSize", 0)
@@ -88,7 +95,7 @@ Item {
     property int fontGrootteS: getSetting("fontGrootteS", 8)
     property int fontGrootteM: getSetting("fontGrootteM", 10)
     property int fontGrootteL: getSetting("fontGrootteL", 14)
-    property int fontGrootteG: getSetting("fontGrootteG", 22)
+    property int fontGrootteG: getSetting("fontGrootteGrateS", 22) // Typo uit origineel behouden mocht je config hiernaar zoeken
     property int fontKlokgrote: getSetting("fontKlokgrote", ((barHoogte - (topBarMargins + bottomBarMargins)) / 2))
 
     property int iconGrooteS: getSetting("iconGrooteS", 12)
@@ -119,15 +126,14 @@ Item {
 
     readonly property var editableKeys: [
         // --- COLOUR ---
-        "achtergrondKleur", "popupAchtergrondKleur", "borderKleur", "accentKleur", "textKleur", "textColourLink", 
+        "basisAchtergrondKleur", "popupAchtergrondKleur", "borderKleur", "accentKleur", "textKleur", "textColourLink", 
         "negatiefTextKleur", "actiefWerkbaldKleur", "volleWerkbaldKleur", "legeWerkbaldKleur", 
         "colourPowerButton", "colourAppPalet", "colourSettingsButton", 
 
         // --- INT ---
-        "barHoogte", "barbuttonlengt", "barBorderSize", "borderSize","topBarMargins", "bottomBarMargins", 
+        "achtergrondTransparantie", "barHoogte", "barbuttonlengt", "barBorderSize", "borderSize","topBarMargins", "bottomBarMargins", 
         "uiMarginsS", "uiMarginsM", "uiMarginsL", "uiMarginsG", "fontGrootteS", "fontGrootteM", "fontGrootteL", 
         "fontGrootteG", "iconGrooteS", "iconGrooteM", "iconGrooteL", "radiusGrooteS", "radiusGrooteM", 
         "radiusGrooteL", "exitTimer", "fastRepeatTimer", "slowRepeatTimer", "sliderThickness", "appletAppAmount", 
         "appletDrawrAmount"
     ]
-} 

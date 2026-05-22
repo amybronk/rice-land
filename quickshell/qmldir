@@ -4,6 +4,7 @@
 #   defalt path
 #~/.config/quickshell/ 
 singleton Style 1.0 Style.qml
+singleton Kleuren 1.0 Colors.qml
 
 #taskbar
 #   defalt path

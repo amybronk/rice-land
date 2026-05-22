@@ -1,7 +1,7 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "source": "fech_icons/arch1.txt",
+    "source": "~/.local/share/quickshell-dotfiles/fastfetch/fech_icons/arch1.txt",
     "type": "file",
     "width": 20,
     "color": {
