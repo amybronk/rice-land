@@ -175,8 +175,6 @@ if ! $IS_UPDATE; then
     mkdir -p "$xdg_DESKTOP_DIR/"
     mkdir -p "$xdg_TEMPLATES_DIR/"
     mkdir -p "$xdg_DOCUMENTS_DIR/"
-    mkdir -p "$xdg_DATA_home/fonts/"
-    mkdir -p "$xdg_DATA_home/icons/"
 
     echo -e ""
     echo -e "${SUCCESS}✓ Wallpaper mapen aangemaaked${RESET}"
