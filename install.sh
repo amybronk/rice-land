@@ -104,9 +104,14 @@ echo -e ""
 echo -e "${BLUE}>>> Repo ophalen...${RESET}"
 
 if [ -d "$REPO_DIR/.git" ]; then
-    echo -e "  Repo updaten..."
-    git -C "$REPO_DIR" pull
-    echo -e "${SUCCESS}✓ Repo geüpdated${RESET}"
+    echo -e "  Repo geforceerd updaten..."
+    # Haal de nieuwste wijzigingen op van GitHub zonder ze direct te mergen
+    git -C "$REPO_DIR" fetch --all
+    # Ontdek de naam van de standaard branch (meestal main of master)
+    DEFAULT_BRANCH=$(git -C "$REPO_DIR" symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+    # Reset alle lokale wijzigingen hardhandig naar de online status
+    git -C "$REPO_DIR" reset --hard "origin/$DEFAULT_BRANCH"
+    echo -e "${SUCCESS}✓ Repo succesvol geforceerd geüpdated${RESET}"
 else
     mkdir -p "$(dirname "$REPO_DIR")"
     git clone "$REPO_URL" "$REPO_DIR"
