@@ -137,3 +137,4 @@ Item {
         "radiusGrooteL", "exitTimer", "fastRepeatTimer", "slowRepeatTimer", "sliderThickness", "appletAppAmount", 
         "appletDrawrAmount"
     ]
+}

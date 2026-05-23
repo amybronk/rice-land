@@ -44,4 +44,12 @@ ShellRoot {
         active: false
         source: "powerwidgit_qml/PowerOffConformation.qml"
     }
+
+	Loader {
+		id: wallpaperPopup          // ← zelfde naam als in de knop
+		active: false
+		source: "Wallpaper_Swicher_qml/wallpaperSwicherPopup.qml"
+		onLoaded: item.requestClose.connect(() => wallpaperPopup.active = false)
+	}
+
 }
