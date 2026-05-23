@@ -249,6 +249,45 @@ else
     echo -e "${SUCCESS}✓ QuickShell is up-to-date${RESET}"
 fi
 
+# ── 10b. Qt-stijlen configureren (qt5ct & qt6ct) ─────────────────
+
+echo -e ""
+echo -e "${BLUE}>>> Qt-stijlen automatiseren (qt5ct & qt6ct)...${RESET}"
+
+# Functie om veilig instellingen in de [Appearance] sectie te zetten/overschrijven
+set_qtct_value() {
+    local file="$1"
+    local key="$2"
+    local value="$3"
+
+    mkdir -p "$(dirname "$file")"
+    touch "$file"
+
+    # Zorg dat de [Appearance] sectie sowieso bestaat
+    if ! grep -q "\[Appearance\]" "$file"; then
+        echo -e "\n[Appearance]" >> "$file"
+    fi
+
+    # Verwijder de oude sleutel als die er al stond (voorkomt duplicaten)
+    sed -i "/^$key=/d" "$file"
+
+    # Voeg de nieuwe sleutel direct onder [Appearance] toe
+    sed -i "/\[Appearance\]/a $key=$value" "$file"
+}
+
+QT5_CONF="$HOME/.config/qt5ct/qt5ct.conf"
+QT6_CONF="$HOME/.config/qt6ct/qt6ct.conf"
+SCHEME_PATH="$HOME/.local/share/color-schemes/Matugen-Base16.colors"
+
+# Pas de instellingen toe voor zowel Qt5 als Qt6
+for conf in "$QT5_CONF" "$QT6_CONF"; do
+    set_qtct_value "$conf" "style" "Breeze"
+    set_qtct_value "$conf" "custom_palette" "false"
+    set_qtct_value "$conf" "color_scheme_path" "$SCHEME_PATH"
+done
+
+echo -e "${SUCCESS}✓ qt5ct en qt6ct ingesteld op Breeze + Matugen-Base16${RESET}"
+
 # ── 11. hyprland herladen & awww starten ───────────────────
 
 echo -e ""

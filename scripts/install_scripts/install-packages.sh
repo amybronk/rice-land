@@ -40,7 +40,10 @@ if command -v pacman &>/dev/null; then
     yay -S --noconfirm --rebuild --needed \
         quickshell \
         matugen-bin \
-        spotify-launcher
+        spotify-launcher \
+        qt6ct-kde \
+        qt5ct-kde \
+        breeze-icons 
 
     echo "${SUCCESS}✓ Packages geïnstalleerd via pacman and the aur${RESET}"
 else

@@ -37,10 +37,12 @@ sh install.sh
 ├── matugen
 │   ├── config.toml
 │   └── templates
-│       ├── alacritty.toml
-│       ├── hyprland_colors.conf
-│       ├── QuickshellColors.qml
-│       └── rofi.rasi
+│       ├── alacritty.toml.template
+│       ├── gtk.css.template
+│       ├── hyprland_colors.conf.template
+│       ├── qt.colors.template
+│       ├── QuickshellColors.qml.template
+│       └── rofi.rasi.template
 ├── notes
 │   ├── dir.md
 │   └── not.md
@@ -55,6 +57,7 @@ sh install.sh
 │   ├── Bar_qml
 │   │   ├── Bar.qml
 │   │   └── WorkeSpaceIndicator.qml
+│   ├── Colors.qml
 │   ├── Klok_qml
 │   │   ├── KlokButton.qml
 │   │   └── KlokWidget.qml
@@ -82,18 +85,21 @@ sh install.sh
 │   │   └── SettingsMenu.qml
 │   ├── shell.qml
 │   ├── Style.qml
-│   └── Ui_elements_qml
-│       ├── AppButton.qml
-│       ├── Button_element.qml
-│       ├── CameraIndicator.qml
-│       ├── LaunchLastSessionButton.qml
-│       ├── MediaProgressBar.qml
-│       ├── MicIndecator.qml
-│       ├── MuteButton_element.qml
-│       ├── OpenAppButton.qml
-│       ├── TailscaleButton.qml
-│       ├── thumbnail_art_element.qml
-│       └── Volume_element.qml
+│   ├── Ui_elements_qml
+│   │   ├── AppButton.qml
+│   │   ├── Button_element.qml
+│   │   ├── CameraIndicator.qml
+│   │   ├── LaunchLastSessionButton.qml
+│   │   ├── MediaProgressBar.qml
+│   │   ├── MicIndecator.qml
+│   │   ├── MuteButton_element.qml
+│   │   ├── OpenAppButton.qml
+│   │   ├── TailscaleButton.qml
+│   │   ├── thumbnail_art_element.qml
+│   │   └── Volume_element.qml
+│   └── Wallpaper_Swicher_qml
+│       ├── WallpaperButton.qml
+│       └── wallpaperSwicherPopup.qml
 ├── rofi
 │   └── config.rasi
 └── scripts

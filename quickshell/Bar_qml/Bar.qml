@@ -109,6 +109,21 @@ PanelWindow {
 		}
 	}
 
+	WallpaperButton {
+		id: wallpaperButton
+
+
+		anchors {
+			top: parent.top
+			left: musicButton.right   // of waar je hem wil
+			bottom: parent.bottom
+
+			topMargin: Style.topBarMargins
+			leftMargin: Style.uiMarginsG
+			bottomMargin: Style.bottomBarMargins
+		}
+	}
+
 	WorkeSpaceIndicator {
 		id: tab
 

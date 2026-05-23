@@ -1,0 +1,19 @@
+[General]
+Name=Matugen-Base16
+ColorScheme=Matugen-Base16
+
+[Colors:Window]
+BackgroundNormal={{ base16.base00.dark.rgb }}
+ForegroundNormal={{ base16.base05.dark.rgb }}
+
+[Colors:View]
+BackgroundNormal={{ base16.base01.dark.rgb }}
+ForegroundNormal={{ base16.base05.dark.rgb }}
+
+[Colors:Button]
+BackgroundNormal={{ base16.base02.dark.rgb }}
+ForegroundNormal={{ base16.base05.dark.rgb }}
+
+[Colors:Selection]
+BackgroundNormal={{ base16.base0D.dark.rgb }}
+ForegroundNormal={{ base16.base00.dark.rgb }}
