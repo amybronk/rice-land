@@ -190,12 +190,20 @@ ShellRoot {
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    // We bouwen de command-array hier direct live op om vertraging te voorkomen
+                                    // 1. Haal het juiste pad op en strip 'file://' eraf mocht dat er staan
+                                    let schoonScriptPad = (Style.rootConfigDir + "scripts/backgroundSwicher/change_wallpaper.sh").replace("file://", "");
+                                    
+                                    // 2. Reset de process status voor de zekerheid
+                                    wallpaperChanger.running = false
+                                    
+                                    // 3. Geef het schone pad en het argument mee
                                     wallpaperChanger.command = [
                                         "sh", 
-                                        Style.rootConfigDir + "scripts/backgroundSwicher/change_wallpaper.sh", 
+                                        schoonScriptPad, 
                                         model.filePath
                                     ]
+                                    
+                                    // 4. Knal hem aan!
                                     wallpaperChanger.running = true
                                     rootWindow.requestClose()
                                 }
