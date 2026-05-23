@@ -190,14 +190,25 @@ ShellRoot {
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    // We bouwen de command-array hier direct live op om vertraging te voorkomen
+                                    // 1. Haal het pad op en strip 'file://' er direct vanaf
+                                    let rawPath = Style.rootConfigDir.replace("file://", "");
+                                    let scriptPath = rawPath + "scripts/backgroundSwicher/change_wallpaper.sh";
+
+                                    // 2. We dwingen bash om eerst exact te loggen welke paden QML doorgeeft
                                     wallpaperChanger.command = [
-                                        "sh", 
-                                        Style.rootConfigDir + "scripts/backgroundSwicher/change_wallpaper.sh", 
-                                        model.filePath
-                                    ]
-                                    wallpaperChanger.running = true
-                                    rootWindow.requestClose()
+                                        "bash", "-c",
+                                        "echo '--- QML KLIK GEREGISTREERD ---' >> /tmp/quickshell_debug.log; " +
+                                        "echo 'Geconstrueerd scriptpad: '\"$1\" >> /tmp/quickshell_debug.log; " +
+                                        "echo 'Gekozen wallpaperpad:    '\"$2\" >> /tmp/quickshell_debug.log; " +
+                                        "sh \"$1\" \"$2\"", 
+                                        "--", scriptPath, model.filePath
+                                    ];
+
+                                    // 3. Reset en start de actie
+                                    wallpaperChanger.running = false;
+                                    wallpaperChanger.running = true;
+                                    
+                                    rootWindow.requestClose();
                                 }
                             }
 
