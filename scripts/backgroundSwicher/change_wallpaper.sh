@@ -23,7 +23,7 @@ awww img "$WALLPAPER" --transition-type grow --transition-fps 60 --transition-du
 echo "$WALLPAPER" > "$HOME/.cache/current_wallpaper"
 
 # 5. Matugen kleuren genereren op basis van de nieuwe wallpaper
-matugen image "$WALLPAPER"
+matugen image "$WALLPAPER" --prefer=saturation
 
 # 6. Hyprland herladen zodat eventuele nieuwe kleuren direct worden toegepast
 hyprctl reload
