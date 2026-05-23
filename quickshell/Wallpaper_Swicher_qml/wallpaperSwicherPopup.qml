@@ -190,7 +190,12 @@ ShellRoot {
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    wallpaperChanger.wallpaperPath = model.filePath
+                                    // We bouwen de command-array hier direct live op om vertraging te voorkomen
+                                    wallpaperChanger.command = [
+                                        "sh", 
+                                        Style.rootConfigDir + "scripts/backgroundSwicher/change_wallpaper.sh", 
+                                        model.filePath
+                                    ]
                                     wallpaperChanger.running = true
                                     rootWindow.requestClose()
                                 }
@@ -243,10 +248,18 @@ ShellRoot {
 
     Process {
         id: wallpaperChanger
-        property string wallpaperPath: ""
-        command: [
-            "bash", "-c",
-            Style.rootConfigDir + "scripts/backgroundSwicher/change_wallpaper.sh '" + wallpaperPath + "'"
-        ]
+        // command wordt nu dynamisch gevuld vanuit de onClicked hierboven
+
+        // Dit print weergaven van je script (zoals "Wallpaper succesvol veranderd") naar je Quickshell terminal
+        stdout: SplitParser {
+            splitMarker: "\n"
+            onRead: (line) => console.log("[Wallpaper Script]:", line.trim())
+        }
+
+        // Dit vangt fouten op (zoals "sh: file not found" of Matugen errors)
+        stderr: SplitParser {
+            splitMarker: "\n"
+            onRead: (line) => console.warn("[Wallpaper Script ERROR]:", line.trim())
+        }
     }
 }
