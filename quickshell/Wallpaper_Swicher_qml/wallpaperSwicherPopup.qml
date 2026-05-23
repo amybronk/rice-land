@@ -190,25 +190,11 @@ ShellRoot {
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    // 1. Haal het pad op en strip 'file://' er direct vanaf
-                                    let rawPath = Style.rootConfigDir.replace("file://", "");
-                                    let scriptPath = rawPath + "scripts/backgroundSwicher/change_wallpaper.sh";
-
-                                    // 2. We dwingen bash om eerst exact te loggen welke paden QML doorgeeft
                                     wallpaperChanger.command = [
                                         "bash", "-c",
-                                        "echo '--- QML KLIK GEREGISTREERD ---' >> /tmp/quickshell_debug.log; " +
-                                        "echo 'Geconstrueerd scriptpad: '\"$1\" >> /tmp/quickshell_debug.log; " +
-                                        "echo 'Gekozen wallpaperpad:    '\"$2\" >> /tmp/quickshell_debug.log; " +
-                                        "sh \"$1\" \"$2\"", 
-                                        "--", scriptPath, model.filePath
+                                        "sh ~/.local/share/quickshell-dotfiles/scripts/backgroundSwicher/change_wallpaper.sh \"" + model.filePath + "\""
                                     ];
-
-                                    // 3. Reset en start de actie
-                                    wallpaperChanger.running = false;
                                     wallpaperChanger.running = true;
-                                    
-                                    rootWindow.requestClose();
                                 }
                             }
 
@@ -259,18 +245,9 @@ ShellRoot {
 
     Process {
         id: wallpaperChanger
-        // command wordt nu dynamisch gevuld vanuit de onClicked hierboven
-
-        // Dit print weergaven van je script (zoals "Wallpaper succesvol veranderd") naar je Quickshell terminal
-        stdout: SplitParser {
-            splitMarker: "\n"
-            onRead: (line) => console.log("[Wallpaper Script]:", line.trim())
-        }
-
-        // Dit vangt fouten op (zoals "sh: file not found" of Matugen errors)
-        stderr: SplitParser {
-            splitMarker: "\n"
-            onRead: (line) => console.warn("[Wallpaper Script ERROR]:", line.trim())
+        running: false
+        stdout: StdioCollector {
+            onStreamFinished: (text) => console.log(`Wallpaper change output: ${text}`)
         }
     }
 }
