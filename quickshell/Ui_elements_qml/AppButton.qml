@@ -81,13 +81,13 @@ Item {
         width: 50
         height: 50
         radius: Style.radiusGrooteS
-        color: Style.accentKleur
+        color: "transparent"
 
         Image {
             id: iconImage
             anchors.centerIn: parent
-            width: parent.width * 0.6
-            height: parent.height * 0.6
+            width: parent.width * 0.95
+            height: parent.height * 0.95
             source: iconName !== "" ? "image://icon/" + iconName : ""
             visible: status === Image.Ready
             fillMode: Image.PreserveAspectFit
@@ -98,8 +98,8 @@ Item {
         Image {
             id: fallbackImage
             anchors.centerIn: parent
-            width: parent.width * 0.6
-            height: parent.height * 0.6
+            width: parent.width * 0.95
+            height: parent.height * 0.95
             source: iconImage.status === Image.Error && iconName !== ""
                     ? "/usr/share/pixmaps/" + iconName + ".png"
                     : ""
@@ -117,8 +117,14 @@ Item {
             visible: iconImage.status !== Image.Ready && fallbackImage.status !== Image.Ready
         }
 
-        opacity: mouseArea.containsMouse ? 0.75 : 1.0
+        opacity: mouseArea.hovered ? 0.75 : 1.0
         Behavior on opacity { NumberAnimation { duration: 100 } }
+
+        scale: mouseArea.hovered ? Style.growAnimateL : 1.0
+
+        Behavior on scale {
+            NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
+        }
     }
 
     Text {
@@ -136,12 +142,13 @@ Item {
         horizontalAlignment: Text.AlignHCenter
     }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
+    HoverHandler {
+        id:mouseArea
         cursorShape: Qt.PointingHandCursor
-        onClicked: {
+    }
+
+    TapHandler {
+        onTapped: {
             RecentApps.recordApp(appData)
             launchProcess.running = true
         }

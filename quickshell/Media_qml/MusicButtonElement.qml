@@ -35,25 +35,23 @@ Rectangle {
 		}
 	}
 
-	MouseArea {
-		anchors.fill: parent
-		hoverEnabled: true
+	HoverHandler {
+		id: musicHover
 		cursorShape: Qt.PointingHandCursor
-
-		onClicked: {
-			musiccontrol.active = true
-		}
-
-		onEntered: {
-			if (musiccontrol.item) {
-				musiccontrol.item.stopSluiten()
+		onHoveredChanged: {
+			if (hovered) {
+				if (musiccontrol.item) musiccontrol.item.stopSluiten()
+			} else {
+				if (musiccontrol.active && musiccontrol.item) musiccontrol.item.startSluiten()
 			}
 		}
+	}
 
-		onExited: {
-			if (musiccontrol.active && musiccontrol.item) {
-				musiccontrol.item.startSluiten()
-			}
-		}
+	TapHandler { onTapped: musiccontrol.active = true }
+
+	scale: musicHover.hovered ? Style.growAnimateM : 1.0
+
+	Behavior on scale {
+		NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
 	}
 }

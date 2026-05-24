@@ -5,7 +5,6 @@ import "../"
 Rectangle {
     id: wallpaperButton
 
-    width: Style.barbuttonlengt
     radius: Style.radiusGrooteM
     color: Style.achtergrondKleur
 
@@ -30,13 +29,12 @@ Rectangle {
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
+    HoverHandler { id: wallHover; cursorShape: Qt.PointingHandCursor }
+    TapHandler { onTapped: wallpaperPopup.active = !wallpaperPopup.active }
 
-        onClicked: {
-            wallpaperPopup.active = !wallpaperPopup.active
-        }
+    scale: wallHover.hovered ? Style.growAnimateM : 1.0
+
+    Behavior on scale {
+        NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
     }
 }

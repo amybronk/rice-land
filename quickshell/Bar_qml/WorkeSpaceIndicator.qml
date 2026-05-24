@@ -36,10 +36,13 @@ Rectangle {
 					return Style.legeWerkbaldKleur
 				}
 
-				MouseArea {
-					anchors.fill: parent
-					cursorShape: Qt.PointingHandCursor
-					onClicked: Hyprland.dispatch("workspace " + (index + 1))
+				HoverHandler { id: wsHover; cursorShape: Qt.PointingHandCursor }
+				TapHandler { onTapped: Hyprland.dispatch("workspace " + (index + 1)) }
+
+				scale: wsHover.hovered ? Style.growAnimateL : 1.0
+
+				Behavior on scale {
+					NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
 				}
 			}
 		}

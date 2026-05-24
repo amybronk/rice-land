@@ -13,6 +13,7 @@ ShellRoot {
 
     // Model weer lokaal in de popup
     ListModel { id: wallpaperModel }
+    
 
     Variants {
         model: Quickshell.screens
@@ -38,6 +39,8 @@ ShellRoot {
 
             color: "transparent"
 
+            
+
             Rectangle {
                 id: popupContainer
 
@@ -45,6 +48,23 @@ ShellRoot {
                     fill: parent
                     margins: Style.uiMarginsG
                 }
+
+            // Verschuift het hele blok zonder de anchors te verstoren
+            transform: Translate {
+                id: slideUp
+                y: 0
+            }
+
+            NumberAnimation {
+                id: openAnim
+                target: slideUp
+                property: "y"
+                from: 350 // Start onder de rand van het venster (implicitHeight is 350)
+                to: 0
+                duration: Style.exitTimer
+                easing.type: Easing.OutCubic
+                running: !Style.disableMvAnimation
+            }
 
                 //height: parent.height - 20
                 color: "transparent"
@@ -82,7 +102,6 @@ ShellRoot {
                         anchors {
                             top: parent.top
                             bottom: parent.bottom
-                            verticalCenter: parent.verticalCenter
                             horizontalCenter: parent.horizontalCenter
                         }
 
@@ -95,8 +114,16 @@ ShellRoot {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                                 horizontalCenter: parent.horizontalCenter
-                            } 
+                            }
+                        }
 
+                        HoverHandler { id: titleHover; cursorShape: Qt.PointingHandCursor }
+                        TapHandler {
+                            onTapped: {
+                                diropenner.command = ["xdg-open", Style.wallpaperDir];
+                                diropenner.running = true;
+
+                            }
                         }
                     }
 
@@ -105,7 +132,7 @@ ShellRoot {
                         id: closeButton
                         width: closeButton.height
                         radius: Style.radiusGrooteM
-                        color: closeArea.containsMouse ? Style.accentKleur : Style.popupAchtergrondKleur
+                        color: closeHover.hovered ? Style.accentKleur : Style.popupAchtergrondKleur
                         border.color: Style.borderKleur
                         border.width: Style.borderSize
 
@@ -130,17 +157,13 @@ ShellRoot {
                             }
                         }
 
-                        MouseArea {
-                            id: closeArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onClicked: rootWindow.requestClose()
-                        }
+                        HoverHandler { id: closeHover; cursorShape: Qt.PointingHandCursor }
+                        TapHandler { onTapped: rootWindow.requestClose() }
 
-                        scale: closeArea.containsMouse ? 1.1 : 1
+                        scale: closeHover.hovered ? Style.growAnimateM : 1
                             
                         Behavior on scale {
-                            NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                            NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
                         }
                     }
                 }
@@ -191,10 +214,10 @@ ShellRoot {
                             id: wallpaperItem
                             anchors.fill: parent
                             
-                            scale: itemHover.containsMouse ? 0.95 : 1
+                            scale: itemHover.hovered ? Style.shrinkAnimateS : 1
                             
                             Behavior on scale {
-                                NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                                NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
                             }
 
                             // 1. De afbeelding met het masker (onderop)
@@ -237,7 +260,7 @@ ShellRoot {
                                 anchors.fill: parent
                                 color: "transparent"
                                 radius: Style.radiusGrooteM
-                                border.color: itemHover.containsMouse ? Style.accentKleur : Style.borderKleur
+                                border.color: itemHover.hovered ? Style.accentKleur : Style.borderKleur
                                 border.width: Style.borderSize
 
                                 Behavior on border.color {
@@ -253,7 +276,7 @@ ShellRoot {
                                 }
                                 height: Style.fontGrootteM + Style.uiMarginsM * 2
                                 color: Qt.rgba(0, 0, 0, 0.5)
-                                visible: itemHover.containsMouse
+                                visible: itemHover.hovered
                             
 
                                 Text {
@@ -272,12 +295,10 @@ ShellRoot {
                                 }
                             }
 
-                            MouseArea {
-                                id: itemHover
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
+                            HoverHandler { id: itemHover; cursorShape: Qt.PointingHandCursor }
+                            
+                            TapHandler {
+                                onTapped: {
                                     wallpaperChanger.command = [
                                         "bash", "-c",
                                         "sh ~/.local/share/quickshell-dotfiles/scripts/backgroundSwicher/change_wallpaper.sh \"" + model.filePath + "\""
@@ -291,17 +312,6 @@ ShellRoot {
                     }
                 }
             }
-
-            // NumberAnimation {
-            //     id: openAnim
-            //     target: popupContainer
-            //     property: "anchors.bottomMargin"
-            //     from: -300
-            //     to: Style.uiMarginsG
-            //     duration: Style.exitTimer
-            //     easing.type: Easing.OutCubic
-            //     running: true
-            // }
         }
     }
 
@@ -336,6 +346,18 @@ ShellRoot {
         running: false
         stdout: StdioCollector {
             onStreamFinished: (text) => console.log(`Wallpaper change output: ${text}`)
+        }
+    }
+
+    Process {
+        id: diropenner
+        running: false
+        onStarted: console.log("Opening directory: " + Style.wallpaperDir)
+        stdout: StdioCollector {
+            onStreamFinished: (text) => {
+                if (text) console.log("xdg-open output: " + text)
+                rootWindow.requestClose()
+            }
         }
     }
 }

@@ -60,38 +60,19 @@ PanelWindow {
 		}
 	}
 
-	SettingsButtonElement {
-		id: settingsB
+	WallpaperButton {
+		id: wallpaperButton
+
+		width: Style.barHoogte
 
 		anchors {
 			top: parent.top
-			left: apppalletButton.right
+			left: apppalletButton.right   // of waar je hem wil
 			bottom: parent.bottom
-			
+
 			topMargin: Style.topBarMargins
 			leftMargin: Style.uiMarginsM
-			rightMargin: Style.uiMarginsS
 			bottomMargin: Style.bottomBarMargins
-		}
-
-		border {
-			color: Style.borderKleur
-			width: Style.barBorderSize
-		}
-
-		radius: Style.radiusGrooteM
-		width: Style.barHoogte
-		color: Style.achtergrondKleur
-
-		Text {
-			anchors.centerIn: parent
-			text: "⚙"
-			color: Style.colourSettingsButton
-			font {
-        		family: Style.globalFontFamily 
-				pixelSize: parent.height * 0.9
-				bold: true 
-			}
 		}
 	}
 
@@ -100,22 +81,7 @@ PanelWindow {
 
 		anchors {
 			top: parent.top
-			left: settingsB.right
-			bottom: parent.bottom
-
-			topMargin: Style.topBarMargins
-			leftMargin: Style.uiMarginsG
-			bottomMargin: Style.bottomBarMargins
-		}
-	}
-
-	WallpaperButton {
-		id: wallpaperButton
-
-
-		anchors {
-			top: parent.top
-			left: musicButton.right   // of waar je hem wil
+			left: wallpaperButton.right
 			bottom: parent.bottom
 
 			topMargin: Style.topBarMargins

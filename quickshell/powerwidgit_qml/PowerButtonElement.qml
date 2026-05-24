@@ -36,25 +36,23 @@ Rectangle {
 		}
 	}
 
-	MouseArea {
-		anchors.fill: parent
-		hoverEnabled: true
+	HoverHandler {
+		id: powerHover
 		cursorShape: Qt.PointingHandCursor
-
-		onClicked: {
-			powerwindow.active = true
-		}
-
-		onEntered: {
-			if (powerwindow.item) {
-				powerwindow.item.stopSluiten()
+		onHoveredChanged: {
+			if (hovered) {
+				if (powerwindow.item) powerwindow.item.stopSluiten()
+			} else {
+				if (powerwindow.active && powerwindow.item) powerwindow.item.startSluiten()
 			}
 		}
+	}
 
-		onExited: {
-			if (powerwindow.active && powerwindow.item) {
-				powerwindow.item.startSluiten()
-			}
-		}
+	TapHandler { onTapped: powerwindow.active = true }
+
+	scale: powerHover.hovered ? Style.growAnimateM : 1.0
+
+	Behavior on scale {
+		NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
 	}
 }

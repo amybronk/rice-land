@@ -33,6 +33,14 @@ PopupWindow {
         onHoveredChanged: {
             if (hovered) {
                 closeTimer.stop()
+                if (closeAnim.running) {
+                    closeAnim.stop()
+                    openAnim.from = slideDouwn.y
+                    openAnim.start()
+                } else if (slideDouwn.y < 0 && !openAnim.running) {
+                    openAnim.from = -mediawindow.height
+                    openAnim.start()
+                }
             } else {
                 closeTimer.start()
             }
@@ -42,268 +50,312 @@ PopupWindow {
     Timer {
         id: closeTimer
         interval: Style.exitTimer
-        onTriggered: musiccontrol.active = false
+        onTriggered: {
+            if (!Style.disableMvAnimation) {
+                closeAnim.start()
+            } else {
+                musiccontrol.active = false
+            }
+        }
     }
 
     function stopSluiten() { closeTimer.stop() }
     function startSluiten() { closeTimer.start() }
-
-    // --- UI ---
-    Rectangle {
-        id: root
+    Item {
+        id: slideWrapper
         anchors.fill: parent
-        radius: Style.radiusGrooteM
-        color: "transparent"
 
-        // --- Hoofdvenster voor media ---
+        transform: Translate {
+            id: slideDouwn
+            y: 0
+        }
+
+        NumberAnimation {
+            id: openAnim
+            target: slideDouwn
+            property: "y"
+            from: -mediawindow.height
+            to: 0
+            duration: Style.animateTimePopup
+            easing.type: Easing.OutQuart
+            running: !Style.disableMvAnimation
+        }
+
+        NumberAnimation {
+            id: closeAnim
+            target: slideDouwn
+            property: "y"
+            from: 0
+            to: -mediawindow.height
+            duration: Style.animateTimePopup
+            easing.type: Easing.InQuart
+            running: false
+            onStopped: if (slideDouwn.y <= -mediawindow.height + 1) musiccontrol.active = false
+        }
+
+        // --- UI ---
         Rectangle {
-            id: mainSubWindow
-            width: 350
-            anchors {
-                top: parent.top
-                left: parent.left
-                bottom: parent.bottom
-            }
-            
-            color: "transparent"
+            id: root
+            anchors.fill: parent
             radius: Style.radiusGrooteM
+            color: "transparent"
 
-
-            // 1. Speler Selectie
-            Row {
-                id: mediaSelector
-                width: parent.width
-                height: Style.barHoogte
-                spacing: 2
+            // --- Hoofdvenster voor media ---
+            Rectangle {
+                id: mainSubWindow
+                width: 350
                 anchors {
                     top: parent.top
                     left: parent.left
-                    right: parent.right
-                    topMargin: Style.uiMarginsM
-                    leftMargin: Style.uiMarginsM
-                    rightMargin: Style.uiMarginsM
+                    bottom: parent.bottom
                 }
-
-                Repeater {
-                    model: MprisService.players
-
-                    Rectangle {
-                        required property MprisPlayer modelData
-                        required property int index
-
-                        width: MprisService.players.length > 0
-                            ? (mediaSelector.width - mediaSelector.leftPadding - mediaSelector.rightPadding - (MprisService.players.length - 1) * mediaSelector.spacing) / MprisService.players.length
-                            : mediaSelector.width - mediaSelector.leftPadding - mediaSelector.rightPadding
-
-                        height: parent.height
-
-                        color: MprisService.activePlayer === modelData ? Style.accentKleur : Style.popupAchtergrondKleur
-                        radius: Style.radiusGrooteM
-                        border {
-                            color: Style.borderKleur
-                            width: Style.mediaBorderSize
-                        }
-
-                        Text {
-                            anchors.centerIn: parent
-                            text: modelData.identity
-                            color: Style.textKleur
-
-                            font { 
-                                pixelSize: Style.fontGrootteL
-                                bold: true
-                                family: Style.globalFontFamily
-                            }
-
-                            elide: Text.ElideRight
-                            width: parent.width - 8
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-
-                        HoverHandler { cursorShape: Qt.PointingHandCursor }
-                        TapHandler { onTapped: MprisService.selectPlayer(index) }
-                    }
-                }
-            }
-
-            // 2. Album Art / Thumbnail
-            ThumbnailArt {
-                id: thumbnail
-                size: Style.mediaWidth
-                anchors {
-                    top: mediaSelector.bottom
-                    topMargin: Style.uiMarginsL
-                    horizontalCenter: parent.horizontalCenter
-                }
-                artUrl: MprisService.activePlayer?.metadata["mpris:artUrl"] ?? ""
-            }
-
-            // 3. Titel Tekst
-            Rectangle {
-                id: titelContainer
-                color: Style.popupAchtergrondKleur // Behouden als container, maar transparant
-                anchors {
-                    top: thumbnail.bottom
-                    horizontalCenter: parent.horizontalCenter
-
-                    topMargin: Style.uiMarginsL
-                }
-
-                border {
-                    color: Style.borderKleur
-                    width: Style.mediaBorderSize
-                }
-
-                height: titelText.implicitHeight + 15
-                width: Style.mediaWidth
+                
+                color: "transparent"
                 radius: Style.radiusGrooteM
 
-                Text {
-                    id: titelText
-                    text: MprisService.activePlayer?.metadata["xesam:title"] ?? "Niets aan het spelen"
-                    color: Style.textKleur
-                    
-                    font { 
-                        family: Style.globalFontFamily
-                        bold: true
-                    }
 
-                    anchors { 
-                        horizontalCenter: parent.horizontalCenter
-                        verticalCenter: parent.verticalCenter
-                    }
-                }
-            }
-
-            // 4. Status Bar (Voortgang)
-            Timer {
-                id: progressTimer
-                interval: Style.fastRepeatTimer 
-                running: MprisService.activePlayer && MprisService.activePlayer.playbackState === MprisPlaybackState.Playing
-                repeat: true
-                onTriggered: {
-                    currentPositionMs = MprisService.activePlayer.position;
-                }
-            }
-
-            Rectangle {
-                id: uielementStatusBar
-
-                anchors {
-                    top: titelContainer.bottom
-                    horizontalCenter: parent.horizontalCenter
-
-                    topMargin: Style.uiMarginsL
-                }
-
-                border {
-                    color: Style.borderKleur
-                    width: Style.mediaBorderSize
-                }
-
-                height: Style.barHoogte
-                width: Style.mediaWidth
-                color: Style.popupAchtergrondKleur
-                radius: Style.radiusGrooteM
-
-                Item {
-                    id: statusBar
-
+                // 1. Speler Selectie
+                Row {
+                    id: mediaSelector
+                    width: parent.width
+                    height: Style.barHoogte
+                    spacing: 2
                     anchors {
+                        top: parent.top
                         left: parent.left
                         right: parent.right
-                        verticalCenter: parent.verticalCenter
-
                         topMargin: Style.uiMarginsM
-                        rightMargin: Style.uiMarginsL
-                        leftMargin: Style.uiMarginsL
-                        bottomMargin: Style.uiMarginsM
+                        leftMargin: Style.uiMarginsM
+                        rightMargin: Style.uiMarginsM
                     }
-                    height: 12 // Gebruik de hoogte van je balk
 
-                    MediaProgressBar {
-                        id: progressBar
-                        anchors.fill: parent
-                        position: currentPositionMs
-                        length: MprisService.activePlayer ? MprisService.activePlayer.length : 1
-                        isSeekable: MprisService.activePlayer ? MprisService.activePlayer.canSeek : false
+                    Repeater {
+                        model: MprisService.players
 
-                        onSeekRequested: (newPos) => {
-                            if (MprisService.activePlayer) {
-                                MprisService.activePlayer.position = newPos;
-                                currentPositionMs = newPos;
+                        Rectangle {
+                            required property MprisPlayer modelData
+                            required property int index
+
+                            width: MprisService.players.length > 0
+                                ? (mediaSelector.width - mediaSelector.leftPadding - mediaSelector.rightPadding - (MprisService.players.length - 1) * mediaSelector.spacing) / MprisService.players.length
+                                : mediaSelector.width - mediaSelector.leftPadding - mediaSelector.rightPadding
+
+                            height: parent.height
+
+                            color: MprisService.activePlayer === modelData ? Style.accentKleur : Style.popupAchtergrondKleur
+                            radius: Style.radiusGrooteM
+                            border {
+                                color: Style.borderKleur
+                                width: Style.mediaBorderSize
+                            }
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: modelData.identity
+                                color: Style.textKleur
+
+                                font { 
+                                    pixelSize: Style.fontGrootteL
+                                    bold: true
+                                    family: Style.globalFontFamily
+                                }
+
+                                elide: Text.ElideRight
+                                width: parent.width - 8
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
+                            HoverHandler { id: playerHover; cursorShape: Qt.PointingHandCursor }
+                            TapHandler { onTapped: MprisService.selectPlayer(index) }
+
+                            scale: playerHover.hovered ? Style.shrinkAnimateS : 1.0
+                            
+                            Behavior on scale {
+                                NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutQuad }
                             }
                         }
                     }
                 }
+
+                // 2. Album Art / Thumbnail
+                ThumbnailArt {
+                    id: thumbnail
+                    size: Style.mediaWidth
+                    anchors {
+                        top: mediaSelector.bottom
+                        topMargin: Style.uiMarginsL
+                        horizontalCenter: parent.horizontalCenter
+                    }
+                    artUrl: MprisService.activePlayer?.metadata["mpris:artUrl"] ?? ""
+                }
+
+                // 3. Titel Tekst
+                Rectangle {
+                    id: titelContainer
+                    color: Style.popupAchtergrondKleur // Behouden als container, maar transparant
+                    anchors {
+                        top: thumbnail.bottom
+                        horizontalCenter: parent.horizontalCenter
+
+                        topMargin: Style.uiMarginsL
+                    }
+
+                    border {
+                        color: Style.borderKleur
+                        width: Style.mediaBorderSize
+                    }
+
+                    height: titelText.implicitHeight + 15
+                    width: Style.mediaWidth
+                    radius: Style.radiusGrooteM
+
+                    Text {
+                        id: titelText
+                        text: MprisService.activePlayer?.metadata["xesam:title"] ?? "Niets aan het spelen"
+                        color: Style.textKleur
+                        
+                        font { 
+                            family: Style.globalFontFamily
+                            bold: true
+                        }
+
+                        anchors { 
+                            horizontalCenter: parent.horizontalCenter
+                            verticalCenter: parent.verticalCenter
+                        }
+                    }
+                }
+
+                // 4. Status Bar (Voortgang)
+                Timer {
+                    id: progressTimer
+                    interval: Style.fastRepeatTimer 
+                    running: MprisService.activePlayer && MprisService.activePlayer.playbackState === MprisPlaybackState.Playing
+                    repeat: true
+                    onTriggered: {
+                        currentPositionMs = MprisService.activePlayer.position;
+                    }
+                }
+
+                Rectangle {
+                    id: uielementStatusBar
+
+                    anchors {
+                        top: titelContainer.bottom
+                        horizontalCenter: parent.horizontalCenter
+
+                        topMargin: Style.uiMarginsL
+                    }
+
+                    border {
+                        color: Style.borderKleur
+                        width: Style.mediaBorderSize
+                    }
+
+                    height: Style.barHoogte
+                    width: Style.mediaWidth
+                    color: Style.popupAchtergrondKleur
+                    radius: Style.radiusGrooteM
+
+                    Item {
+                        id: statusBar
+
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            verticalCenter: parent.verticalCenter
+
+                            topMargin: Style.uiMarginsM
+                            rightMargin: Style.uiMarginsL
+                            leftMargin: Style.uiMarginsL
+                            bottomMargin: Style.uiMarginsM
+                        }
+                        height: 12 // Gebruik de hoogte van je balk
+
+                        MediaProgressBar {
+                            id: progressBar
+                            anchors.fill: parent
+                            position: currentPositionMs
+                            length: MprisService.activePlayer ? MprisService.activePlayer.length : 1
+                            isSeekable: MprisService.activePlayer ? MprisService.activePlayer.canSeek : false
+
+                            onSeekRequested: (newPos) => {
+                                if (MprisService.activePlayer) {
+                                    MprisService.activePlayer.position = newPos;
+                                    currentPositionMs = newPos;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 5. Media Knoppen (Vorige, Pauze, Volgende)
+                Row {
+                    id: mediaControls
+                    anchors {
+                        top: uielementStatusBar.bottom
+                        horizontalCenter: parent.horizontalCenter
+                        topMargin: Style.uiMarginsL
+                    }
+                    height: Style.barHoogte
+                    spacing: Style.uiMarginsS
+
+                    Button_element {
+                        id: previousButton
+                        text: "⏮"
+                        onClicked: MprisService.previous()
+                    }
+
+                    Button_element {
+                        id: pauseButton
+                        text: MprisService.activePlayer?.playbackState === MprisPlaybackState.Playing ? "⏸" : "▶"
+                        onClicked: MprisService.playPause()
+                        baseColor: Style.accentKleur
+                    }
+
+                    Button_element {
+                        id: nextButton
+                        text: "⏭"
+                        onClicked: MprisService.next()
+                    }
+                }
             }
 
-            // 5. Media Knoppen (Vorige, Pauze, Volgende)
-            Row {
-                id: mediaControls
+            // --- Volume venster ---
+            Rectangle {
+                id: volumeSubWindow
                 anchors {
-                    top: uielementStatusBar.bottom
-                    horizontalCenter: parent.horizontalCenter
-                    topMargin: Style.uiMarginsL
-                }
-                height: Style.barHoogte
-                spacing: Style.uiMarginsS
-
-                Button_element {
-                    id: previousButton
-                    text: "⏮"
-                    onClicked: MprisService.previous()
-                }
-
-                Button_element {
-                    id: pauseButton
-                    text: MprisService.activePlayer?.playbackState === MprisPlaybackState.Playing ? "⏸" : "▶"
-                    onClicked: MprisService.playPause()
-                    baseColor: Style.accentKleur
-                }
-
-                Button_element {
-                    id: nextButton
-                    text: "⏭"
-                    onClicked: MprisService.next()
-                }
-            }
-        }
-
-        // --- Volume venster ---
-        Rectangle {
-            id: volumeSubWindow
-            anchors {
-                top: parent.top
-                right: parent.right
-                bottom: parent.bottom
-                left: mainSubWindow.right
-                leftMargin: Style.uiMarginsM
-            }
-            
-            color: Style.popupAchtergrondKleur
-            radius: Style.radiusGrooteM
-            border {
-                color: Style.borderKleur
-                width: Style.mediaBorderSize
-            }
-
-            Volume_element {
-                anchors {
-                    horizontalCenter: parent.horizontalCenter
                     top: parent.top
-                    bottom: mutebutton.top
-                    topMargin: Style.uiMarginsL
-                    bottomMargin: Style.uiMarginsL
-                }
-            }
-
-            MuteButton {
-                id: mutebutton
-                anchors {
-                    horizontalCenter: parent.horizontalCenter
+                    right: parent.right
                     bottom: parent.bottom
-                    bottomMargin: Style.uiMarginsL
+                    left: mainSubWindow.right
+                    leftMargin: Style.uiMarginsM
+                }
+                
+                color: Style.popupAchtergrondKleur
+                radius: Style.radiusGrooteM
+                border {
+                    color: Style.borderKleur
+                    width: Style.mediaBorderSize
+                }
+
+                Volume_element {
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        top: parent.top
+                        bottom: mutebutton.top
+                        topMargin: Style.uiMarginsL
+                        bottomMargin: Style.uiMarginsL
+                    }
+                }
+
+                MuteButton {
+                    id: mutebutton
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        bottom: parent.bottom
+                        bottomMargin: Style.uiMarginsL
+                    }
                 }
             }
         }
