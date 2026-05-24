@@ -17,7 +17,7 @@ if [ ! -f "$WALLPAPER" ]; then
 fi
 
 # 3. De wallpaper veranderen met awww (met een mooie transitie)
-awww img "$WALLPAPER" --transition-type grow --transition-fps 60 --transition-duration 1
+awww img "$WALLPAPER" --transition-type grow --transition-fps 60 --transition-duration 5
 
 # 4. Het pad opslaan in de cache voor de volgende opstart (reboot-safe)
 echo "$WALLPAPER" > "$HOME/.cache/current_wallpaper"

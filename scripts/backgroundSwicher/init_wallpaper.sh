@@ -17,17 +17,17 @@ if [ -f "$CACHE_FILE" ]; then
     if [ -f "$SAVED_WALLPAPER" ]; then
         awww img "$SAVED_WALLPAPER" --transition-type none
 
-        matugen image "$SAVED_WALLPAPER"
+        matugen image "$SAVED_WALLPAPER" --prefer=saturation
     
     else
         awww img "$DEFAULT_WALLPAPER" --transition-type none
 
-        matugen image "$DEFAULT_WALLPAPER"
+        matugen image "$DEFAULT_WALLPAPER" --prefer=saturation
     fi
 else
     awww img "$DEFAULT_WALLPAPER" --transition-type none
 
-    matugen image "$DEFAULT_WALLPAPER"
+    matugen image "$DEFAULT_WALLPAPER" --prefer=saturation
 
 fi
 

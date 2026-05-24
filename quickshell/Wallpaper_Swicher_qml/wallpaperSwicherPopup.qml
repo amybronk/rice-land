@@ -3,6 +3,7 @@ import Quickshell.Io
 import Quickshell.Wayland
 import QtQuick
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 import "../"
 
 ShellRoot {
@@ -10,10 +11,8 @@ ShellRoot {
 
     signal requestClose()
 
-    // Model op ShellRoot-niveau zodat de Process er bij kan
-    ListModel {
-        id: wallpaperModel
-    }
+    // Model weer lokaal in de popup
+    ListModel { id: wallpaperModel }
 
     Variants {
         model: Quickshell.screens
@@ -24,13 +23,14 @@ ShellRoot {
 
             screen: modelData
 
+            implicitHeight: 350
+
             anchors {
                 bottom: true
                 left: true
                 right: true
             }
 
-            implicitHeight: 280
 
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: "qs-wallpaper-switcher"
@@ -42,63 +42,106 @@ ShellRoot {
                 id: popupContainer
 
                 anchors {
-                    left: parent.left
-                    right: parent.right
-                    bottom: parent.bottom
-                    leftMargin: Style.uiMarginsG
-                    rightMargin: Style.uiMarginsG
-                    bottomMargin: Style.uiMarginsG
+                    fill: parent
+                    margins: Style.uiMarginsG
                 }
 
-                height: 260
-                color: Style.popupAchtergrondKleur
+                //height: parent.height - 20
+                color: "transparent"
                 radius: Style.radiusGrooteL
-                border.color: Style.borderKleur
-                border.width: Style.borderSize
 
-                // Titel
-                Text {
-                    id: titleLabel
-                    text: "Wallpaper kiezen"
-                    color: Style.textKleur
-                    font.family: Style.globalFontFamily
-                    font.pixelSize: Style.fontGrootteM
+                Rectangle {
+                    id: titleBar
+
                     anchors {
                         top: parent.top
                         left: parent.left
-                        topMargin: Style.uiMarginsM
-                        leftMargin: Style.uiMarginsG
-                    }
-                }
-
-                // Sluitknop
-                Rectangle {
-                    width: 22
-                    height: 22
-                    radius: 11
-                    color: closeArea.containsMouse ? Style.accentKleur : "transparent"
-                    border.color: Style.borderKleur
-                    border.width: Style.borderSize
-
-                    anchors {
-                        top: parent.top
                         right: parent.right
+                        
+
                         topMargin: Style.uiMarginsM
+                        leftMargin: Style.uiMarginsM
                         rightMargin: Style.uiMarginsG
+                        
+                    }
+                    height: Style.barHoogte
+                    color: "transparent"
+
+                    Rectangle {
+                        id: titelContainer
+
+                        color: Style.popupAchtergrondKleur
+                        radius: Style.radiusGrooteM
+                        width: 200
+
+                        border {
+                            color: Style.borderKleur
+                            width: Style.borderSize
+                        }
+
+                        anchors {
+                            top: parent.top
+                            bottom: parent.bottom
+                            verticalCenter: parent.verticalCenter
+                            horizontalCenter: parent.horizontalCenter
+                        }
+
+                        Text {
+                            id: title
+                            text: "Wallpaper kiezen"
+                            color: Style.textKleur
+                            font.family: Style.globalFontFamily
+                            font.pixelSize: parent.height * 0.4
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                                horizontalCenter: parent.horizontalCenter
+                            } 
+
+                        }
                     }
 
-                    Text {
-                        text: "✕"
-                        color: Style.textKleur
-                        font.pixelSize: Style.fontGrootteS
-                        anchors.centerIn: parent
-                    }
+                    // Sluitknop
+                    Rectangle {
+                        id: closeButton
+                        width: closeButton.height
+                        radius: Style.radiusGrooteM
+                        color: closeArea.containsMouse ? Style.accentKleur : Style.popupAchtergrondKleur
+                        border.color: Style.borderKleur
+                        border.width: Style.borderSize
 
-                    MouseArea {
-                        id: closeArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: rootWindow.requestClose()
+                        anchors {
+                            top: parent.top
+                            bottom:parent.bottom
+
+                            left: titelContainer.right
+                            leftMargin: Style.uiMarginsM
+                        }
+
+                        Text {
+                            text: "x"
+                            color: Style.textKleur
+                            font.pixelSize: closeButton.height * 0.7
+                            font.family: Style.globalFontFamily
+                            anchors {
+                                centerIn: parent
+
+                                verticalCenterOffset: -1
+                                horizontalCenterOffset: 0
+                            }
+                        }
+
+                        MouseArea {
+                            id: closeArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: rootWindow.requestClose()
+                        }
+
+                        scale: closeArea.containsMouse ? 1.1 : 1
+                            
+                        Behavior on scale {
+                            NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                        }
                     }
                 }
 
@@ -107,44 +150,74 @@ ShellRoot {
                     id: wallpaperList
 
                     anchors {
-                        top: titleLabel.bottom
+                        top: titleBar.bottom
                         left: parent.left
                         right: parent.right
                         bottom: parent.bottom
                         margins: Style.uiMarginsG
-                        topMargin: Style.uiMarginsM
+                        topMargin: Style.uiMarginsL
                     }
 
                     orientation: ListView.Horizontal
-                    spacing: Style.uiMarginsM
+                    spacing: Style.uiMarginsL
+                    flickableDirection: Flickable.AutoFlickDirection
                     clip: true
+                    cacheBuffer: 1000 // Houdt items buiten beeld alvast 'klaar' voor soepel scrollen
 
                     ScrollBar.horizontal: ScrollBar {
+                        id: scrollBar
                         policy: ScrollBar.AsNeeded
+                    }
+
+                    // Verbeterde scroll-afhandeling voor muiswiel
+                    MouseArea {
+                        anchors.fill: parent
+                        propagateComposedEvents: true
+                        onWheel: (event) => {
+                            wallpaperList.contentX = Math.max(0, Math.min(wallpaperList.contentWidth - wallpaperList.width, wallpaperList.contentX - event.angleDelta.y));
+                        }
+                        // Zorg dat we klik-events niet blokkeren voor de wallpapers
+                        onPressed: (mouse) => mouse.accepted = false
+                        onReleased: (mouse) => mouse.accepted = false
                     }
 
                     model: wallpaperModel
 
                     delegate: Item {
-                        width: 200
+                        width: 300
                         height: wallpaperList.height
 
-                        Rectangle {
+                        Item {
+                            id: wallpaperItem
                             anchors.fill: parent
-                            radius: Style.radiusGrooteM
-                            color: Style.basisAchtergrondKleur
-                            border.color: itemHover.containsMouse ? Style.accentKleur : Style.borderKleur
-                            border.width: Style.borderSize
-                            clip: true
+                            
+                            scale: itemHover.containsMouse ? 0.95 : 1
+                            
+                            Behavior on scale {
+                                NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                            }
+
+                            // 1. De afbeelding met het masker (onderop)
+                            Item {
+                                id: imageContainer
+                                anchors.fill: parent
+                                layer.enabled: true
+                                layer.effect: OpacityMask {
+                                    maskSource: Rectangle {
+                                        width: imageContainer.width
+                                        height: imageContainer.height
+                                        radius: Style.radiusGrooteM
+                                    }
+                                }
 
                             Image {
                                 anchors.fill: parent
-                                anchors.margins: itemHover.containsMouse ? Style.borderSize : 0
                                 source: "file://" + model.filePath
                                 fillMode: Image.PreserveAspectCrop
-                                sourceSize.width: 200
-                                sourceSize.height: 200
+                                sourceSize.width: 300 // Beperk resolutie voor minder RAM-druk
+                                sourceSize.height: 300
                                 asynchronous: true
+                                cache: true
 
                                 Rectangle {
                                     anchors.fill: parent
@@ -156,6 +229,20 @@ ShellRoot {
                                         font.pixelSize: Style.fontGrootteG
                                     }
                                 }
+                                }
+                            }
+
+                            // 2. De Border (bovenop de afbeelding)
+                            Rectangle {
+                                anchors.fill: parent
+                                color: "transparent"
+                                radius: Style.radiusGrooteM
+                                border.color: itemHover.containsMouse ? Style.accentKleur : Style.borderKleur
+                                border.width: Style.borderSize
+
+                                Behavior on border.color {
+                                    ColorAnimation { duration: Style.exitTimer / 2 }
+                                }
                             }
 
                             Rectangle {
@@ -165,15 +252,16 @@ ShellRoot {
                                     bottom: parent.bottom
                                 }
                                 height: Style.fontGrootteM + Style.uiMarginsM * 2
-                                color: Qt.rgba(0, 0, 0, 0.6)
+                                color: Qt.rgba(0, 0, 0, 0.5)
                                 visible: itemHover.containsMouse
+                            
 
                                 Text {
                                     anchors {
                                         left: parent.left
                                         right: parent.right
                                         verticalCenter: parent.verticalCenter
-                                        leftMargin: Style.uiMarginsS
+                                        leftMargin: Style.uiMarginsL
                                         rightMargin: Style.uiMarginsS
                                     }
                                     text: model.fileName
@@ -198,26 +286,26 @@ ShellRoot {
                                 }
                             }
 
-                            Behavior on border.color {
-                                ColorAnimation { duration: Style.exitTimer / 2 }
-                            }
+
                         }
                     }
                 }
             }
 
-            NumberAnimation {
-                target: popupContainer
-                property: "anchors.bottomMargin"
-                from: -popupContainer.height
-                to: Style.uiMarginsG
-                duration: Style.exitTimer
-                easing.type: Easing.OutCubic
-                running: true
-            }
+            // NumberAnimation {
+            //     id: openAnim
+            //     target: popupContainer
+            //     property: "anchors.bottomMargin"
+            //     from: -300
+            //     to: Style.uiMarginsG
+            //     duration: Style.exitTimer
+            //     easing.type: Easing.OutCubic
+            //     running: true
+            // }
         }
     }
 
+    // De scanner is weer terug in de popup
     Process {
         id: wallpaperScanner
         command: [
