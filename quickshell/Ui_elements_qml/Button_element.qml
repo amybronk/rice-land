@@ -19,10 +19,13 @@ Rectangle {
         width: Style.borderSize
     }
 
-    HoverHandler { id: hoverHandler }
+    HoverHandler { id: hoverHandler; cursorShape: Qt.PointingHandCursor }
+    TapHandler { onTapped: buttonRoot.clicked() }
+
+    scale: hoverHandler.hovered ? Style.growAnimateM : 1.0
     
-    TapHandler { 
-        onTapped: buttonRoot.clicked() 
+    Behavior on scale {
+        NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
     }
 
     Text {

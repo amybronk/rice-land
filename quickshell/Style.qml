@@ -4,8 +4,9 @@ import QtQuick
 
 Item {
     id: root
-
-    readonly property string rootConfigDir: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0].toString().replace("file://", "") + "/.config/quickshell/"
+    
+    readonly property string homePath: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0].toString().replace("file://", "")
+    readonly property string rootConfigDir: homePath + "/.config/quickshell/"
 
     Settings {
         id: styleSettings
@@ -105,10 +106,27 @@ Item {
     property int radiusGrooteS: getSetting("radiusGrooteS", 4)
     property int radiusGrooteM: getSetting("radiusGrooteM", 10)
     property int radiusGrooteL: getSetting("radiusGrooteL", 14)
-    property int exitTimer: getSetting("exitTimer", 350)
 
+
+    property int exitTimer: getSetting("exitTimer", 350)
     property int fastRepeatTimer: getSetting("fastRepeatTimer", 500)
     property int slowRepeatTimer: getSetting("slowRepeatTimer", 2000)
+    property bool disableMvAnimation: getSetting("disableMvAnimation", false)
+
+    property int animateTime: getSetting("animateTime", 200)
+    property int animateTimePopup: getSetting("animateTimePopup", 150)
+
+
+
+    property real shrinkAnimateS: getSetting("shrinkAnimateS", 0.95)
+    property real shrinkAnimateM: getSetting("shrinkAnimateM", 0.9)
+    property real shrinkAnimateL: getSetting("shrinkAnimateL", 0.8)
+
+    property real growAnimateS: getSetting("growAnimateS", 1.05)
+    property real growAnimateM: getSetting("growAnimateM", 1.1)
+    property real growAnimateL: getSetting("growAnimateL", 1.2)
+
+
 
     property int mediaWidth: getSetting("mediaWidth", 340)
 
@@ -119,10 +137,11 @@ Item {
 
     property string globalFontFamily: getSetting("globalFontFamily", "Hack")
 
-    // --- directorys ---
-    readonly property string saveState: "$HOME/.config/quickshell/SaveStates_txt/"
-    readonly property string quickshellDir: "$HOME/.config/quickshell/"
-    readonly property string saveStatDir: "$HOME/.config/quickshell/SaveStates_txt/"
+    // --- directories ---
+    readonly property string quickshellDir: rootConfigDir
+    readonly property string saveStatDir: rootConfigDir + "SaveStates_txt/"
+    readonly property string saveState: saveStatDir
+    readonly property string wallpaperDir: homePath + "/Pictures/wallpapers/"
 
     readonly property var editableKeys: [
         // --- COLOUR ---
@@ -135,6 +154,14 @@ Item {
         "uiMarginsS", "uiMarginsM", "uiMarginsL", "uiMarginsG", "fontGrootteS", "fontGrootteM", "fontGrootteL", 
         "fontGrootteG", "iconGrooteS", "iconGrooteM", "iconGrooteL", "radiusGrooteS", "radiusGrooteM", 
         "radiusGrooteL", "exitTimer", "fastRepeatTimer", "slowRepeatTimer", "sliderThickness", "appletAppAmount", 
-        "appletDrawrAmount"
+        "appletDrawrAmount",
+
+        // --- animate int ---
+        "animateTime", "shrinkAnimateS", "shrinkAnimateM", "shrinkAnimateL", "growAnimateS", "growAnimateM", "growAnimateL"
+
     ]
 }
+
+
+
+/**/
