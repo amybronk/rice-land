@@ -31,9 +31,6 @@ PopupWindow {
         )
     }
 
-    
-
-
     HoverHandler {
         id: popupHover
         onHoveredChanged: {

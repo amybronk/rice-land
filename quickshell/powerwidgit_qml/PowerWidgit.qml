@@ -2,6 +2,7 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 import "../"
+import "../sys_info_qml"
 
 PopupWindow {
     id: powermaneger
@@ -175,98 +176,17 @@ PopupWindow {
                 }
             }
 
-            // --- select your power profilles ---
-            Rectangle {
+            PowerProfileSelector {
                 id: powerProfilleSlector
-
-                property string huidigProfiel: ""
-                property var    profielen:     ["power-saver", "balanced", "performance"]
-
-                border {
-                    color: Style.borderKleur
-                    width: Style.borderSize
-                }
-
-                height: Style.barHoogte
-                color:  "transparent"
-                radius: Style.radiusGrooteM
-
                 anchors {
-                    top:   settingsW.bottom
-                    left:  parent.left
+                    top: settingsW.bottom
+                    left: parent.left
                     right: parent.right
-
-                    topMargin:   Style.uiMarginsM
-                    leftMargin:  Style.uiMarginsM
+                    topMargin: Style.uiMarginsM
+                    leftMargin: Style.uiMarginsM
                     rightMargin: Style.uiMarginsM
                 }
-
-                // huidig profiel ophalen bij opstarten
-                Process {
-                    id: getProfielProc
-                    command: ["powerprofilesctl", "get"]
-                    running: true
-
-                    stdout: SplitParser {
-                        onRead: data => {
-                            const t = data.trim()
-                            if (t !== "") powerProfilleSlector.huidigProfiel = t
-                        }
-                    }
-                }
-
-                // profiel instellen
-                Process {
-                    id: setProfielProc
-                    property string doel: ""
-                    command: ["powerprofilesctl", "set", doel]
-
-                    onExited: (code, _) => {
-                        if (code === 0) powerProfilleSlector.huidigProfiel = doel
-                    }
-                }
-
-                Row {
-                    anchors.centerIn: parent
-                    spacing: 8
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: powerProfilleSlector.huidigProfiel !== ""
-                            ? powerProfilleSlector.huidigProfiel
-                            : "laden…"
-                        color: Style.textKleur
-
-                        font {
-                            family: Style.globalFontFamily
-                            pixelSize: 18
-                            bold:      true
-                        }
-                    }
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text:  "▾"
-                        color: Style.textKleur
-                        font {
-                            family: Style.globalFontFamily
-                            pixelSize: 14
-                        }
-                    }
-                }
-
-                HoverHandler { id: profilleHover; cursorShape: Qt.PointingHandCursor }
-                TapHandler {
-                    onTapped: {
-                        bestandDropdown.visible = false
-                        profielDropdown.visible = !profielDropdown.visible
-                    }
-                }
-
-                scale: profilleHover.hovered ? Style.growAnimateS : 1.0
-                Behavior on scale {
-                    NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
-                }
+                onDropdownOpenChanged: if (dropdownOpen) bestandDropdown.visible = false
             }
 
             // --- set shutdown timer ---
@@ -683,11 +603,12 @@ PopupWindow {
                 }
 
                 HoverHandler { id: saveStateHover; cursorShape: Qt.PointingHandCursor }
-                TapHandler {
-                    onTapped: {
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
                         saveStateSelector.laadBestanden()
                         // sluit de andere dropdown als die open is
-                        profielDropdown.visible = false
+                        powerProfilleSlector.dropdownOpen = false
                         bestandDropdown.visible = !bestandDropdown.visible
                     }
                 }
@@ -888,113 +809,39 @@ PopupWindow {
                 }
             }
 
+            // De overlay: vult de hele widget, ligt bovenop knoppen (z:50) 
+            // maar onder de opengeklapte dropdowns (z:100).
+            Item {
+                id: clickAwayOverlay
+                anchors.fill: parent
+                z: 50 
+                visible: powerProfilleSlector.dropdownOpen || bestandDropdown.visible
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        powerProfilleSlector.dropdownOpen = false
+                        bestandDropdown.visible = false
+                    }
+                }
+            }
+
             // ═══════════════════════════════════════════════════════════════
             // DROPDOWN OVERLAYS — altijd aan het einde zodat ze bovenop renderen
             // ═══════════════════════════════════════════════════════════════
-
-            // --- transparante achtergrond om dropdowns te sluiten ---
-            Item {
-                anchors.fill: parent
-                z: 5
-                visible: profielDropdown.visible || bestandDropdown.visible
-                TapHandler { onTapped: {
-                    profielDropdown.visible = false
-                    bestandDropdown.visible = false
-                }}
-            }
-
-            // --- power profiel dropdown overlay ---
-            Rectangle {
-                id: profielDropdown
-                visible: false
-                z: 10
-
-                x:      Style.uiMarginsM
-                y:      powerProfilleSlector.y + powerProfilleSlector.height + Style.uiMarginsM / 2
-                width:  rootui.width - Style.uiMarginsM * 2
-
-                // hoogte = aantal profielen × (barHoogte + spacing) + padding
-                height: powerProfilleSlector.profielen.length
-                        * (Style.barHoogte + Style.uiMarginsM)
-                        + Style.uiMarginsM
-
-                color:  Style.popupAchtergrondKleur
-                radius: Style.radiusGrooteM
-
-                border { 
-                    color: Style.borderKleur
-                    width: Style.borderSize 
-                }
-
-                Column {
-                    anchors {
-                        top:   parent.top
-                        left:  parent.left
-                        right: parent.right
-
-                        topMargin:   Style.uiMarginsM
-                        leftMargin:  Style.uiMarginsM
-                        rightMargin: Style.uiMarginsM
-                    }
-
-                    spacing: Style.uiMarginsM / 2
-
-                    Repeater {
-                        model: powerProfilleSlector.profielen
-
-                        Rectangle {
-                            width:  parent.width
-                            height: Style.barHoogte
-                            color:  "transparent"
-                            radius: Style.radiusGrooteM
-
-                            border {
-                                color: modelData === powerProfilleSlector.huidigProfiel
-                                    ? Style.textKleur
-                                    : Style.borderKleur
-                                width: Style.borderSize
-                            }
-
-                            Text {
-                                anchors.centerIn: parent
-                                text:  modelData
-                                color: Style.textKleur
-
-                                font {
-                                    family: Style.globalFontFamily
-                                    pixelSize: 18
-                                    bold: modelData === powerProfilleSlector.huidigProfiel
-                                }
-                            }
-
-                            HoverHandler { id: itemHover; cursorShape: Qt.PointingHandCursor }
-                            TapHandler {
-                                onTapped: {
-                                    setProfielProc.doel    = modelData
-                                    setProfielProc.running = true
-                                    profielDropdown.visible = false
-                                }
-                            }
-
-                            scale: itemHover.hovered ? Style.shrinkAnimateS : 1.0
-                            Behavior on scale {
-                                NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
-                            }
-                                
-                        }
-                    }
-                }
-            }
             
-
             // --- bestand dropdown overlay ---
             Rectangle {
                 id: bestandDropdown
                 visible: false
-                z: 10
+                z: 100
 
                 x:      Style.uiMarginsM
                 y:      saveStateSelector.y + saveStateSelector.height + Style.uiMarginsM / 2
+
+                // MouseArea blokkeert klikken naar de elementen die hier fysiek achter liggen
+                MouseArea { anchors.fill: parent }
+
                 width:  rootui.width - Style.uiMarginsM * 2
 
                 height: Math.min(

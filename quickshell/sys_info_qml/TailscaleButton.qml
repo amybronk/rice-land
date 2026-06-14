@@ -6,6 +6,7 @@ import "../"
 Rectangle {
     id: tailscaleButton
 
+    height: parent.height
     radius: Style.radiusGrooteM
     width: tailscaleAanwezig ? root.height : 0
     visible: tailscaleAanwezig
@@ -80,18 +81,20 @@ Rectangle {
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
+    HoverHandler {
+        id: hoverHandler
         cursorShape: Qt.PointingHandCursor
+    }
 
-        onClicked: {
-            if (tailscaleButton.tailscaleActief) {
-                tailscaleDown.running = true
-            } else {
-                tailscaleUp.running = true
-            }
-        }
+    TapHandler {
+        onTapped: tailscaleButton.tailscaleActief ? tailscaleDown.running = true : tailscaleUp.running = true
+    }
+
+    scale: hoverHandler.hovered ? Style.growAnimateM : 1.0
+    Behavior on width { NumberAnimation { duration: Style.animateTime } }
+
+    Behavior on scale {
+        NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutQuad }
     }
 
     Timer {

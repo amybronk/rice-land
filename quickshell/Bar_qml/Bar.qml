@@ -105,32 +105,25 @@ PanelWindow {
 		}
 	}
 
-	CameraIndicator {
-		id: cameraindication
-
-		anchors {
-			top: parent.top
-			right: tailscaleButton.left
-			bottom: parent.bottom
-			
-			topMargin: Style.topBarMargins
-			rightMargin: Style.uiMarginsS
-			bottomMargin: Style.bottomBarMargins
-		}
-	}
-
-	TailscaleButton {
-		id: tailscaleButton
+	Row {
+		id: sysTray
+		spacing: Style.uiMarginsM
+		layoutDirection: Qt.RightToLeft
 
 		anchors {
 			top: parent.top
 			right: klok.left
+			left: tab.right
 			bottom: parent.bottom
-
 			topMargin: Style.topBarMargins
 			rightMargin: Style.uiMarginsM
+			leftMargin: Style.uiMarginsM
 			bottomMargin: Style.bottomBarMargins
 		}
+
+		Batprocentage { id: batprocentage }
+		TailscaleButton { id: tailscaleButton }
+		CameraIndicator { id: cameraindication }
 	}
 	
 	KlokButton {

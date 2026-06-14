@@ -9,10 +9,11 @@ Rectangle {
 
     property bool cameraActive: false
 
+    height: parent.height
     radius: Style.radiusGrooteM
     color: Style.achtergrondKleur
 
-    width: cameraActive ? root.height : 0
+    width: cameraActive ? height : 0
     visible: opacity > 0
     opacity: cameraActive ? 1 : 0
 
