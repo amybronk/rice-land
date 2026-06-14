@@ -32,17 +32,18 @@ sh install.sh
 ├── fish
 │   └── config.fish
 ├── hypr
-│   └── hyprland.conf
+│   ├── hyprland.lua
+│   └── old-hyprland.conf
 ├── install.sh
 ├── matugen
 │   ├── config.toml
 │   └── templates
-│       ├── alacritty.toml.template
-│       ├── gtk.css.template
-│       ├── hyprland_colors.conf.template
-│       ├── qt.colors.template
-│       ├── QuickshellColors.qml.template
-│       └── rofi.rasi.template
+│       ├── alacritty.toml
+│       ├── gtk.css
+│       ├── hyprland_colors.conf
+│       ├── qt.colors
+│       ├── QuickshellColors.qml
+│       └── rofi.rasi
 ├── notes
 │   ├── dir.md
 │   ├── klok widget dezinge notes.drawy
