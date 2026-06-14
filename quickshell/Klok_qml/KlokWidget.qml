@@ -12,6 +12,8 @@ PopupWindow {
     visible: true
     color: "transparent"
 
+    
+
 	implicitHeight: 300
     implicitWidth: 125
 
@@ -46,65 +48,118 @@ PopupWindow {
     function stopSluiten() { closeTimer.stop() }
     function startSluiten() { closeTimer.start() }
 
-    // --- ui ---
-	Rectangle {
-		anchors.fill: parent
-		
-		color: Style.popupAchtergrondKleur
-		radius: Style.radiusGrooteM
-
-        border {
-            width: Style.borderSize
-            color: Style.borderKleur
-        }
-
-        // --- klok ---
+    Item {
+        id: rootui
         Rectangle {
-            id: digitalklok
-            anchors {
-                top: parent.top
-                left: parent.left
-                right: parent.right
+            id: timeui
 
-                topMargin: Style.uiMarginsM
+            height: (Style.barHoogte * 7) + (Style.uiMarginsG * 2)
+
+            anchors {
+                top: parent
+                left: parent
+                right: parent
+
             }
 
-            height: klok_column.height
-            color: "transparent"
+            
+            Rectangle {
+                id: timetext
 
-            Column {
-                id: klok_column
-                spacing: -2
-                anchors.centerIn: parent
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+
+                    leftMargin:  Style.uiMarginsM
+                    rightMargin: Style.uiMarginsM
+                }
+
+                height: Style.barHoogte
 
                 Text {
                     id: klok_text
                     color: Style.textKleur
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: Style.fontGrootteL
+                    font.pixelSize: Style.fontKlokgrote
                     text: Qt.formatDateTime(new Date(), "HH:mm:ss")
                 }
+            }
+
+            Rectangle {
+                id: analogklok
+
+                anchors {
+                    top: timetext.bottom
+                    left: parent.left
+                    right: parent.right
+
+                    topMargin:   Style.uiMarginsG
+                    leftMargin:  Style.uiMarginsM
+                    rightMargin: Style.uiMarginsM
+                    
+                }
+
+                height: Style.barHoogte * 6
+            }
+        }
+        Rectangle {
+            id: dateui
+
+            anchors {
+                top: timeui.bottom
+                right: parent
+                left: parent
+                bottom: parent
+            }
+            
+            Rectangle {
+                id: datetext
+
+                height: Style.barHoogte
 
                 Text {
                     id: date_text
                     color: Style.textKleur
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: Style.fontGrootteL
+                    font.pixelSize: Style.fontKlokgrote
                     text: Qt.formatDateTime(new Date(), "dddd, dd MMMM yyyy")
                 }
+            }
 
-                Timer {
-                    interval: 1000
-                    running: true
-                    repeat: true
-                    onTriggered: {
-                        var date = new Date()
-                        klok_text.text = Qt.formatDateTime(date, "HH:mm:ss")
-                        date_text.text = Qt.formatDateTime(date, "dddd, dd MMMM yyyy")
-                    }
+            Rectangle {
+                id: buttonui
+
+                Rectangle {
+                    id: lastmonth
+                }
+
+                Rectangle {
+                    id: thismonth
+                }
+
+                Rectangle {
+                    id: nextmonth
                 }
             }
+            Row {
+                id: dayindecator
+            }
+
+            Grid {
+                id: monthblok
+            }
         }
-        // --- todo more UI ---
-	}
+
+        Timer {
+			interval: 1000
+			running: true
+			repeat: true
+			onTriggered: {
+				var date = new Date()
+				klok_text.text = Qt.formatDateTime(date, "HH:mm:ss")
+				date_text.text = Qt.formatDateTime(date, "dddd, dd MMMM yyyy")
+			}
+		}
+    }
 }

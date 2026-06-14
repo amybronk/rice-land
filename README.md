@@ -45,6 +45,7 @@ sh install.sh
 │       └── rofi.rasi.template
 ├── notes
 │   ├── dir.md
+│   ├── klok widget dezinge notes.drawy
 │   └── not.md
 ├── quickshell
 │   ├── AppPallet_qml
@@ -85,16 +86,20 @@ sh install.sh
 │   │   └── SettingsMenu.qml
 │   ├── shell.qml
 │   ├── Style.qml
+│   ├── sys_info_qml
+│   │   ├── Batprocentage.qml
+│   │   ├── CameraIndicator.qml
+│   │   ├── PowerProfileSelector.qml
+│   │   └── TailscaleButton.qml
 │   ├── Ui_elements_qml
 │   │   ├── AppButton.qml
 │   │   ├── Button_element.qml
-│   │   ├── CameraIndicator.qml
 │   │   ├── LaunchLastSessionButton.qml
 │   │   ├── MediaProgressBar.qml
 │   │   ├── MicIndecator.qml
 │   │   ├── MuteButton_element.qml
 │   │   ├── OpenAppButton.qml
-│   │   ├── TailscaleButton.qml
+│   │   ├── PowerProfileSelector.qml
 │   │   ├── thumbnail_art_element.qml
 │   │   └── Volume_element.qml
 │   └── Wallpaper_Swicher_qml
@@ -108,6 +113,7 @@ sh install.sh
     │   └── init_wallpaper.sh
     ├── globoltheaming
     └── install_scripts
-        └── install-packages.sh
+        ├── install-packages.sh
+        └── second_install_pkg.sh
 ```
 <!-- TREE_END -->

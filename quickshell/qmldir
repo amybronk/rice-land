@@ -33,13 +33,12 @@ MediaProgressBar 1.0 Ui_elements_qml/MediaProgressBar.qml
 ThumbnailArt 1.0 Ui_elements_qml/thumbnail_art_element.qml
 Volume_element 1.0 Ui_elements_qml/Volume_element.qml
 MuteButton 1.0 Ui_elements_qml/MuteButton_element.qml
-TailscaleButton 1.0 Ui_elements_qml/TailscaleButton.qml
-CameraIndicator 1.0 Ui_elements_qml/CameraIndicator.qml
 MicIndecator 1.0 Ui_elements_qml/MicIndecator.qml
 AppButton 1.0 Ui_elements_qml/AppButton.qml
 LaunchLastSessionButton 1.0 Ui_elements_qml/LaunchLastSessionButton.qml
 OpenAppButton 1.0 Ui_elements_qml/OpenAppButton.qml
 DirOpener 1.0 Ui_elements_qml/DirOpener.qml
+PowerProfileSelector 1.0 Ui_elements_qml/PowerProfileSelector.qml
 
 #app palet
 #   defalt path
@@ -67,3 +66,10 @@ SettingsButtonElement 1.0 Settings_qml/SettingsButtonElement.qml
 # ~/.config/quickshell/wallpaper_qml/
 WallpaperPopup 1.0 Wallpaper_Swicher_qml/wallpaperSwicherPopup.qml
 WallpaperButton 1.0 Wallpaper_Swicher_qml/WallpaperButton.qml
+
+# sys info 
+# ~/.config/quickshell/sys_info_qml/
+Batprocentage 1.0 sys_info_qml/Batprocentage.qml
+TailscaleButton 1.0 sys_info_qml/TailscaleButton.qml
+CameraIndicator 1.0 sys_info_qml/CameraIndicator.qml
+

@@ -75,6 +75,14 @@ else
     echo -e "${SUCCESS}✓ git is al geïnstalleerd${RESET}"
 fi
 
+if ! command -v flatpak &>/dev/null; then
+    sudo pacman -S --needed --noconfirm flatpak
+    echo -e "${SUCCESS}✓ flatpak geïnstalleerd${RESET}"
+else
+    echo -e "${SUCCESS}✓ flatpak is al geïnstalleerd${RESET}"
+fi
+
+
 # ── 3. yay installeren ───────────────────────────────────────────
 
 echo -e ""
@@ -366,5 +374,13 @@ else
 echo -e "╔══════════════════════════════════════╗"
 echo -e "║   Installatie klaar!                 ║"
 echo -e "╚══════════════════════════════════════╝"
+echo -e "${RESET}"
+echo -e ""
+echo -e "$(ERROR)"
+echo -e "pleas restart PC and run"
+echo -e ""
+echo -e "sh !/.local/share/quickshell-dotfiles/scripts/install_scripts/second_install_pkg.sh"
+echo -e ""
+echo -e "This will install a bunch of flatpacs used in this project
 fi
 echo -e "${RESET}"

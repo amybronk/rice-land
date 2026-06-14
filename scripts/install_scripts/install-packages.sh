@@ -13,40 +13,84 @@ ERROR="${BOLD}${RED}"
 # detecteer package manager
 if command -v pacman &>/dev/null; then
     sudo pacman -S --needed --noconfirm \
-        libnotify \
-        libjxl \
-        hyprland \
-        qt5-graphicaleffects \
-        qt6-declarative \
         git \
-        vivaldi \
-        kate \
+        hyprland \
+        hyprshot \
+        hyprpicker \
         rofi \
-        awww \
+        fish \
+        kate \
         alacritty \
         fastfetch \
-        fish \
+        \
+        \
+        wl-clipboard \
+        wl-clip-persist \
+        cliphist \
+        playerctl \
+        unzip \
+        btop \
+        hwinfo \
         starship \
+        tumbler \
+        micro \
         eza \
         bat \
         ugrep \
         reflector \
         expac \
-        hwinfo \
         meld \
-        micro \
-        discord
+        pavucontrol \
+        brightnessctl \
+        \
+        \
+        libnotify \
+        libjxl \
+        \
+        \
+        qt5-graphicaleffects \
+        qt6-declarative \
+        breeze-icons \
+        \
+        \
+        kdeconnect \
+        drawy \
+        zotero \
+        satty \
+        \
+        \
+        pulseview \
+        prusa-slicer \
+        kicad \
+        freecad \
+        libreoffice \
+        \
+        \
+        discord \
+        spotify-launcher
+
     
     yay -S --noconfirm --rebuild --needed \
         quickshell \
         matugen-bin \
-        spotify-launcher \
         qt6ct-kde \
         qt5ct-kde \
-        breeze-icons 
+        vscodium-bin \
+        whatpulse \
+        vivaldi \
+        awww \
+        whatpulse-external-pcap \
+        nwg-look
 
     echo "${SUCCESS}✓ Packages geïnstalleerd via pacman and the aur${RESET}"
 else
     echo "${ERROR}✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)${RESET}"
     exit 1
 fi
+#        thunar \
+#        thunar-archive-plugin \
+#        gvfs \
+#        grim \
+#        slurp \
+#        spectacle \
+#   

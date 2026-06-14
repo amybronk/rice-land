@@ -7,37 +7,36 @@ Rectangle {
 
 	visible: true
 	radius: Style.radiusGrooteM
-	width: klok_column.width + 20
+	implicitWidth: klok_column.width + 20
 	color: Style.achtergrondKleur
 	border {
 		color: Style.borderKleur
 		width: Style.barBorderSize
 	}
 
-	MouseArea {
-		anchors.fill: parent
-		hoverEnabled: true
+	HoverHandler {
+		id: klokHover
 		cursorShape: Qt.PointingHandCursor
-		onClicked: {
-			klokwidget.active = true
-		}
-
-		onEntered: {
-			if (klokwidget.item) {
-				klokwidget.item.stopSluiten()
-			}
-		}
-			
-		onExited: {
-			if (klokwidget.active && klokwidget.item) {
-				klokwidget.item.startSluiten()
+		onHoveredChanged: {
+			if (hovered) {
+				if (klokwidget.item) klokwidget.item.stopSluiten()
+			} else {
+				if (klokwidget.active && klokwidget.item) klokwidget.item.startSluiten()
 			}
 		}
 	}
 
+	TapHandler { onTapped: klokwidget.active = true }
+
+	scale: klokHover.hovered ? Style.growAnimateS : 1.0
+
+	Behavior on scale {
+		NumberAnimation { duration: Style.animateTime; easing.type: Easing.OutCubic }
+	}
+
 	Column {
 		id: klok_column
-		spacing: -2
+		spacing: -4
 		anchors.centerIn: parent
 
 		Text {

@@ -128,6 +128,10 @@ Item {
 
 
 
+    property int batPsProcent: getSetting("batPsProcent", 20)
+
+
+
     property int mediaWidth: getSetting("mediaWidth", 340)
 
     property int sliderThickness: getSetting("sliderThickness", 8)
@@ -136,6 +140,8 @@ Item {
     property int appletDrawrAmount: getSetting("appletDrawrAmount", 2)
 
     property string globalFontFamily: getSetting("globalFontFamily", "Hack")
+    
+    readonly property string weekvolgorde: ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"]
 
     // --- directories ---
     readonly property string quickshellDir: rootConfigDir
