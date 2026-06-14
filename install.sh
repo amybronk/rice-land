@@ -61,6 +61,9 @@ echo -e "${RESET}"
 
 if ! command -v pacman &>/dev/null; then
     echo -e "${ERROR}✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)${RESET}"
+    echo -e "${BLUE}>>> updating all pacman pkg${RESET}"
+    sudo pacman -Syu --noconfirm
+    echo -e "${SUCCESS}✓ Systeem geüpdated via pacman${RESET}"
     exit 1
 fi
 
@@ -217,12 +220,10 @@ if ! $IS_UPDATE; then
     fi
 fi
 
-# ── 9. systeem updaten & Qt-versie bijhouden ─────────────────────
+# ── 9. systeem updaten ─────────────────────────────────────────────
 
 echo -e ""
 echo -e "${BLUE}>>> Systeem updaten...${RESET}"
-
-QT_VERSION_VOOR=$(pacman -Q qt6-base 2>/dev/null | awk '{print $2}' | cut -d. -f1,2 || echo "niet-geinstalleerd")
 
 sudo pacman -Syu --noconfirm
 echo -e "${SUCCESS}✓ Systeem geüpdated via pacman${RESET}"
@@ -230,11 +231,6 @@ echo -e "${SUCCESS}✓ Systeem geüpdated via pacman${RESET}"
 yay -Syu --noconfirm --ignore quickshell
 echo -e "${SUCCESS}✓ AUR pakketten geüpdated via yay${RESET}"
 
-QT_VERSION_NA=$(pacman -Q qt6-base 2>/dev/null | awk '{print $2}' | cut -d. -f1,2 || echo "niet-geinstalleerd")
-
-echo -e ""
-echo -e "${BLUE}  Qt versie vóór update : $QT_VERSION_VOOR${RESET}"
-echo -e "${BLUE}  Qt versie na update   : $QT_VERSION_NA${RESET}"
 
 # ── 10. packages installeren / quickshell hercompileren ───────────
 

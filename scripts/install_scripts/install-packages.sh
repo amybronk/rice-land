@@ -17,13 +17,12 @@ if command -v pacman &>/dev/null; then
         hyprland \
         hyprshot \
         hyprpicker \
+        quickshell \
         rofi \
         fish \
         kate \
         alacritty \
         fastfetch \
-        \
-        \
         wl-clipboard \
         wl-clip-persist \
         cliphist \
@@ -42,36 +41,24 @@ if command -v pacman &>/dev/null; then
         meld \
         pavucontrol \
         brightnessctl \
-        \
-        \
         libnotify \
         libjxl \
-        \
-        \
         qt5-graphicaleffects \
         qt6-declarative \
         breeze-icons \
-        \
-        \
         kdeconnect \
         drawy \
-        zotero \
         satty \
-        \
-        \
         pulseview \
         prusa-slicer \
         kicad \
         freecad \
-        libreoffice \
-        \
-        \
+        libreoffice-still \
         discord \
         spotify-launcher
 
     
     yay -S --noconfirm --rebuild --needed \
-        quickshell \
         matugen-bin \
         qt6ct-kde \
         qt5ct-kde \
@@ -87,10 +74,12 @@ else
     echo "${ERROR}✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)${RESET}"
     exit 1
 fi
-#        thunar \
-#        thunar-archive-plugin \
-#        gvfs \
-#        grim \
-#        slurp \
-#        spectacle \
-#   
+
+#        thunar 
+#        thunar-archive-plugin 
+#        gvfs 
+#        grim 
+#        slurp 
+#        spectacle 
+#        zotero 
+#   .
