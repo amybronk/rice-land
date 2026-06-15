@@ -32,6 +32,7 @@ sh install.sh
 ├── fish
 │   └── config.fish
 ├── hypr
+│   ├── colors.lua
 │   ├── hyprland.lua
 │   └── old-hyprland.conf
 ├── install.sh
