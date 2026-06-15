@@ -4,7 +4,29 @@
 --  Adjust terminal and browser to your preference
 -- ==============================================================================
 
-hl.source("~/.config/hypr/colors.conf")
+local colors_path = os.getenv("HOME") .. "/.config/hypr/colors.lua"
+local colors = {
+  primary   = "ffb0d0ff",
+  secondary = "e1bdc9ff",
+  tertiary  = "191114ff",
+  surface   = "191114ff",
+  background= "191114ff",
+  foreground= "ffffffcc",
+}
+
+-- Probeer matugen bestand te laden, val terug op fallback bij error/missing
+local ok, loaded = pcall(loadfile, colors_path)
+if ok and loaded then
+  local loaded_colors = loaded()
+  if loaded_colors then colors = loaded_colors end
+end
+
+-- 2. Globale Hyprland kleuren (worden pas ingesteld na laden)
+col.active_border = {colors.primary, colors.secondary, 45}
+col.inactive_border = {colors.surface, 0.8}
+col.background = colors.background
+col.foreground = colors.foreground
+
 
 -- -- Monitor -------------------------------------------------------------------
 -- preferred = use native resolution of the screen

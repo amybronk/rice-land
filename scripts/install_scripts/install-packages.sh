@@ -74,12 +74,3 @@ else
     echo "${ERROR}✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)${RESET}"
     exit 1
 fi
-
-#        thunar 
-#        thunar-archive-plugin 
-#        gvfs 
-#        grim 
-#        slurp 
-#        spectacle 
-#        zotero 
-#   .

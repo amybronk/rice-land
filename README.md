@@ -40,7 +40,8 @@ sh install.sh
 │   └── templates
 │       ├── alacritty.toml
 │       ├── gtk.css
-│       ├── hyprland_colors.conf
+│       ├── hyprland_colors.lua
+│       ├── old-hyprland_colors.conf
 │       ├── qt.colors
 │       ├── QuickshellColors.qml
 │       └── rofi.rasi
