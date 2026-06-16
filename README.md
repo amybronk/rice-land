@@ -44,6 +44,7 @@ sh install.sh
 │       ├── hyprland_colors.lua
 │       ├── old-hyprland_colors.conf
 │       ├── qt.colors
+│       ├── QuickshellColors_base.qml
 │       ├── QuickshellColors.qml
 │       └── rofi.rasi
 ├── notes
@@ -61,6 +62,7 @@ sh install.sh
 │   ├── Bar_qml
 │   │   ├── Bar.qml
 │   │   └── WorkeSpaceIndicator.qml
+│   ├── Colors_base.qml
 │   ├── Colors.qml
 │   ├── Klok_qml
 │   │   ├── KlokButton.qml

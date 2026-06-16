@@ -8,9 +8,9 @@ Rectangle {
 	visible: true
 	radius: Style.radiusGrooteM
 	implicitWidth: klok_column.width + 20
-	color: Style.achtergrondKleur
+	color: Colors.background
 	border {
-		color: Style.borderKleur
+		color: Colors.outline
 		width: Style.barBorderSize
 	}
 
@@ -41,7 +41,7 @@ Rectangle {
 
 		Text {
 			id: klok_text
-			color: Style.textKleur
+			color: Colors.on_background
 			anchors.horizontalCenter: parent.horizontalCenter
 			font.pixelSize: Style.fontKlokgrote
 			text: Qt.formatDateTime(new Date(), "HH:mm:ss")
@@ -49,7 +49,7 @@ Rectangle {
 
 		Text {
 			id: date_text
-			color: Style.textKleur
+			color: Colors.on_background
 			anchors.horizontalCenter: parent.horizontalCenter
 			font.pixelSize: Style.fontKlokgrote
 			text: Qt.formatDateTime(new Date(), "dddd, dd MMMM yyyy")
