@@ -142,17 +142,17 @@ PopupWindow {
 
                             height: parent.height
 
-                            color: MprisService.activePlayer === modelData ? Style.accentKleur : Style.popupAchtergrondKleur
+                            color: MprisService.activePlayer === modelData ? Colors.primary : Colors.surface
                             radius: Style.radiusGrooteM
                             border {
-                                color: Style.borderKleur
+                                color: Colors.outline
                                 width: Style.mediaBorderSize
                             }
 
                             Text {
                                 anchors.centerIn: parent
                                 text: modelData.identity
-                                color: Style.textKleur
+                                color: MprisService.activePlayer === modelData ? Colors.on_primary : Colors.on_surface
 
                                 font { 
                                     pixelSize: Style.fontGrootteL
@@ -192,7 +192,7 @@ PopupWindow {
                 // 3. Titel Tekst
                 Rectangle {
                     id: titelContainer
-                    color: Style.popupAchtergrondKleur // Behouden als container, maar transparant
+                    color: Colors.surface // Behouden als container, maar transparant
                     anchors {
                         top: thumbnail.bottom
                         horizontalCenter: parent.horizontalCenter
@@ -201,7 +201,7 @@ PopupWindow {
                     }
 
                     border {
-                        color: Style.borderKleur
+                        color: colors.outline
                         width: Style.mediaBorderSize
                     }
 
@@ -212,7 +212,7 @@ PopupWindow {
                     Text {
                         id: titelText
                         text: MprisService.activePlayer?.metadata["xesam:title"] ?? "Niets aan het spelen"
-                        color: Style.textKleur
+                        color: colors.on_surface
                         
                         font { 
                             family: Style.globalFontFamily
@@ -248,13 +248,13 @@ PopupWindow {
                     }
 
                     border {
-                        color: Style.borderKleur
+                        color: Colors.outline
                         width: Style.mediaBorderSize
                     }
 
                     height: Style.barHoogte
                     width: Style.mediaWidth
-                    color: Style.popupAchtergrondKleur
+                    color: Colors.surface
                     radius: Style.radiusGrooteM
 
                     Item {
@@ -310,7 +310,7 @@ PopupWindow {
                         id: pauseButton
                         text: MprisService.activePlayer?.playbackState === MprisPlaybackState.Playing ? "⏸" : "▶"
                         onClicked: MprisService.playPause()
-                        baseColor: Style.accentKleur
+                        baseColor: Colors.primary
                     }
 
                     Button_element {
@@ -332,10 +332,10 @@ PopupWindow {
                     leftMargin: Style.uiMarginsM
                 }
                 
-                color: Style.popupAchtergrondKleur
+                color: Color.surface
                 radius: Style.radiusGrooteM
                 border {
-                    color: Style.borderKleur
+                    color: Color.outline
                     width: Style.mediaBorderSize
                 }
 

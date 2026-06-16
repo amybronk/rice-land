@@ -55,26 +55,26 @@ Item {
     }
 
     // --- COLOUR & MATUGEN INTEGRATION---
-    property color basisAchtergrondKleur: getSetting("basisAchtergrondKleur", Kleuren.background)
+    property color basisAchtergrondKleur: getSetting("basisAchtergrondKleur", Colors.background)
     property color achtergrondKleur: Qt.rgba(basisAchtergrondKleur.r, basisAchtergrondKleur.g, basisAchtergrondKleur.b, (achtergrondTransparantie / 100.0))
 
-    property color popupAchtergrondKleur: getSetting("popupAchtergrondKleur", Kleuren.surface)
-    property color borderKleur: getSetting("borderKleur", Kleuren.outline)
-    property color accentKleur: getSetting("accentKleur", Kleuren.primary)
+    property color popupAchtergrondKleur: getSetting("popupAchtergrondKleur", Colors.surface)
+    property color borderKleur: getSetting("borderKleur", Colors.outline)
+    property color accentKleur: getSetting("accentKleur", Colors.primary)
 
-    property color textKleur: getSetting("textKleur", Kleuren.on_background)
-    property color textColourLink: getSetting("textColourLink", Kleuren.tertiary)      // Handig voor linkjes
-    property color negatiefTextKleur: getSetting("negatiefTextKleur", Kleuren.on_primary) // Donkere tekst voor op lichte vlakken
+    property color textKleur: getSetting("textKleur", Colors.on_background)
+    property color textColourLink: getSetting("textColourLink", Colors.tertiary)      // Handig voor linkjes
+    property color negatiefTextKleur: getSetting("negatiefTextKleur", Colors.on_primary) // Donkere tekst voor op lichte vlakken
 
     // Werkbladen (Workspaces)
-    property color actiefWerkbaldKleur: getSetting("actiefWerkbaldKleur", Kleuren.primary)
-    property color volleWerkbaldKleur: getSetting("volleWerkbaldKleur", Kleuren.primary_container)
-    property color legeWerkbaldKleur: getSetting("legeWerkbaldKleur", Kleuren.surface_variant)
+    property color actiefWerkbaldKleur: getSetting("actiefWerkbaldKleur", Colors.primary)
+    property color volleWerkbaldKleur: getSetting("volleWerkbaldKleur", Colors.primary_container)
+    property color legeWerkbaldKleur: getSetting("legeWerkbaldKleur", Colors.surface_variant)
 
     // Specifieke Knoppen
-    property color colourPowerButton: getSetting("colourPowerButton", Kleuren.error) // Gebruikt de Matugen 'error' (rood/roze) tint
-    property color colourAppPalet: getSetting("colourAppPalet", Kleuren.secondary)
-    property color colourSettingsButton: getSetting("colourSettingsButton", Kleuren.secondary_container)
+    property color colourPowerButton: getSetting("colourPowerButton", Colors.error) // Gebruikt de Matugen 'error' (rood/roze) tint
+    property color colourAppPalet: getSetting("colourAppPalet", Colors.secondary)
+    property color colourSettingsButton: getSetting("colourSettingsButton", Colors.secondary_container)
 
     // --- INT & TRANSPARENCY ---
     // Instelling voor de achtergrond: 0 = onzichtbaar, 100 = volledig effen
@@ -129,6 +129,7 @@ Item {
 
 
     property int batPsProcent: getSetting("batPsProcent", 20)
+    property int klokInsetPixels: getSetting("klokInsetPixels", 15)
 
 
 
@@ -153,14 +154,14 @@ Item {
         // --- COLOUR ---
         "basisAchtergrondKleur", "popupAchtergrondKleur", "borderKleur", "accentKleur", "textKleur", "textColourLink", 
         "negatiefTextKleur", "actiefWerkbaldKleur", "volleWerkbaldKleur", "legeWerkbaldKleur", 
-        "colourPowerButton", "colourAppPalet", "colourSettingsButton", 
+        "colourPowerButton", "colourAppPalet", "colorSettingsButton", 
 
         // --- INT ---
         "achtergrondTransparantie", "barHoogte", "barbuttonlengt", "barBorderSize", "borderSize","topBarMargins", "bottomBarMargins", 
         "uiMarginsS", "uiMarginsM", "uiMarginsL", "uiMarginsG", "fontGrootteS", "fontGrootteM", "fontGrootteL", 
         "fontGrootteG", "iconGrooteS", "iconGrooteM", "iconGrooteL", "radiusGrooteS", "radiusGrooteM", 
         "radiusGrooteL", "exitTimer", "fastRepeatTimer", "slowRepeatTimer", "sliderThickness", "appletAppAmount", 
-        "appletDrawrAmount",
+        "appletDrawrAmount", "klokInsetPixels",
 
         // --- animate int ---
         "animateTime", "shrinkAnimateS", "shrinkAnimateM", "shrinkAnimateL", "growAnimateS", "growAnimateM", "growAnimateL"

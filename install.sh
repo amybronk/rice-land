@@ -318,7 +318,7 @@ echo -e "${SUCCESS}✓ loginctl available: $HEEFT_LOGINCTL${RESET}"
 echo -e ""
 echo -e "${BLUE}>>> Starting applications...${RESET}"
 
-QS &
+qs &
 
 # Safe shell change (prevents errors if fish is already set or missing)
 CURRENT_SHELL=$(grep "^$USER:" /etc/passwd | cut -d: -f7)
