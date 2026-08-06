@@ -1,0 +1,5 @@
+module systemPopup
+
+Multi 1.0 MultiPopup.qml
+singleton PopupManager 1.0 PopupManager.qml
+

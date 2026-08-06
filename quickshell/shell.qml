@@ -1,159 +1,52 @@
+// shell.qml
 import Quickshell
 import QtCore
 import QtQuick
 import "."
-
-//Shell.qml
+import "bar"
+import "widgets"
+import "systemPopup"
 
 ShellRoot {
     id: shellRoot
 
-	Component.onCompleted: {
-        Qt.application.name = "Quickshell"
-        Qt.application.organization = "UserConfig"
+    Variants {
+        model: Quickshell.screens
+        
+        // Quickshell stuurt de schermen automatisch naar de modelData property in Bar.qml
+        delegate: Bar {}
     }
+    Variants {
+        model: Quickshell.screens
+        delegate: PanelWindow {
+            id: popupWindow
+            required property var modelData
+            screen: modelData
 
-    Bar { id: barWindow }
+            color: "transparent"
 
-	Loader {
-		id: musiccontrol
-		active: false
-		source: "Media_qml/MediaWidget.qml"
-	}
+            // --- QUICKSHELL v0.3.0 WAYLAND OVERLAY CONTROL ---
+            // Zorgt dat het venster bovenop zweeft en niks naar beneden duwt
+            exclusionMode: ExclusionMode.Ignore
+            aboveWindows: true
 
-	Loader {
-		id: klokwidget
-		active: false
-		source: "Klok_qml/KlokWidget.qml"
-	}
+            anchors {
+                top: true
+            }
+            
+            margins {
+                top: 40 // Hoogte van je bar
+            }
 
-	Loader {
-		id: applet
-		active: false
-		source: "AppPallet_qml/AppPallet.qml"
-	}
+            // Gebruik exact jouw implicit maten opzet:
+            implicitWidth: popupContent.width
+            implicitHeight: popupContent.height
 
-	Loader {
-		id: powerwindow
-		active: false
-		source: "powerwidgit_qml/PowerWidgit.qml"
-	}
-
-	Loader {
-        id: shutdownConfirmWindow
-        active: false
-        source: "powerwidgit_qml/PowerOffConformation.qml"
+            Multi {
+                id: popupContent
+                screenName: popupWindow.screen.name
+                isCurrentScreen: PopupManager.activeScreen === popupWindow.screen.name
+            }
+        }
     }
-
-	Loader {
-		id: wallpaperPopup          // ← zelfde naam als in de knop
-		active: false
-		source: "Wallpaper_Swicher_qml/wallpaperSwicherPopup.qml"
-		onLoaded: item.requestClose.connect(() => wallpaperPopup.active = false)
-	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
