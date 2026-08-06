@@ -33,16 +33,16 @@ sh install.sh
 │   └── config.fish
 ├── hypr
 │   ├── colors.lua
-│   ├── hyprland.lua
-│   └── old-hyprland.conf
+│   └── hyprland.lua
 ├── install.sh
+├── lose_config_files
+│   └── starship.toml
 ├── matugen
 │   ├── config.toml
 │   └── templates
 │       ├── alacritty.toml
 │       ├── gtk.css
 │       ├── hyprland_colors.lua
-│       ├── old-hyprland_colors.conf
 │       ├── qt.colors
 │       ├── QuickshellColors_base.qml
 │       ├── QuickshellColors.qml
@@ -52,6 +52,22 @@ sh install.sh
 │   ├── klok widget dezinge notes.drawy
 │   └── not.md
 ├── quickshell
+│   ├── bar
+│   │   ├── Bar.qml
+│   │   └── qmldir
+│   ├── Colors.qml
+│   ├── qmldir
+│   ├── shell.qml
+│   ├── Style.qml
+│   ├── systemPopup
+│   │   ├── MultiPopup.qml
+│   │   ├── PopupManager.qml
+│   │   └── qmldir
+│   ├── Time.qml
+│   └── widgets
+│       ├── Clock.qml
+│       └── qmldir
+├── quickshell v1
 │   ├── AppPallet_qml
 │   │   ├── AppPalletButton.qml
 │   │   ├── AppPallet.qml
@@ -112,13 +128,15 @@ sh install.sh
 │       └── wallpaperSwicherPopup.qml
 ├── rofi
 │   └── config.rasi
-└── scripts
-    ├── backgroundSwicher
-    │   ├── change_wallpaper.sh
-    │   └── init_wallpaper.sh
-    ├── globoltheaming
-    └── install_scripts
-        ├── install-packages.sh
-        └── second_install_pkg.sh
+├── scripts
+│   ├── backgroundSwicher
+│   │   ├── change_wallpaper.sh
+│   │   └── init_wallpaper.sh
+│   ├── globoltheaming
+│   └── install_scripts
+│       ├── install-packages.sh
+│       └── second_install_pkg.sh
+└── workespce
+    └── rice-land.code-workspace
 ```
 <!-- TREE_END -->

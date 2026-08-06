@@ -320,12 +320,19 @@ echo -e "${BLUE}>>> Starting applications...${RESET}"
 
 qs &
 
-# Safe shell change (prevents errors if fish is already set or missing)
-CURRENT_SHELL=$(grep "^$USER:" /etc/passwd | cut -d: -f7)
-if [ "$CURRENT_SHELL" != "/usr/bin/fish" ] && [ "$CURRENT_SHELL" != "/usr/local/bin/fish" ]; then
+CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
+TARGET_SHELL=$(command -v fish || echo "/usr/bin/fish")
+
+if [ "$CURRENT_SHELL" != "$TARGET_SHELL" ]; then
     echo -e "  Changing shell to fish..."
-    chsh -s /usr/bin/fish 2>/dev/null || chsh -s /usr/local/bin/fish
-    echo -e "  ${SUCCESS}✓ Shell set to fish${RESET}"
+    
+    # Running chsh without suppressing errors so password prompts and failures are visible
+    if chsh -s "$TARGET_SHELL"; then
+        echo -e "  ${SUCCESS}✓ Shell set to fish${RESET}"
+    else
+        echo -e "  ${ERROR}✗ Failed to set shell to fish${RESET}" >&2
+        # You might want to add 'exit 1' here depending on your script's flow
+    fi
 else
     echo -e "  ${SUCCESS}✓ Shell is already set to fish${RESET}"
 fi
