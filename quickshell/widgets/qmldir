@@ -1,3 +1,4 @@
 module widgets
 
 Clock 1.0 Clock.qml
+SliderContainer 1.0 Slider_container.qml

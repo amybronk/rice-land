@@ -1,0 +1,11 @@
+module media
+
+Mediaplayer 1.0 Mediaplayer.qml
+Thumbnail 1.0 Media_thumbnail.qml
+Progresbar 1.0 Mediaprogresbar.qml
+Next_button 1.0 Next_button.qml
+Pause_button 1.0 Pause_button.qml
+Peff_buton 1.0 Peff_buton.qml
+PlayerSelector 1.0 PlayerSelector.qml
+
+singleton MprisController 1.0 MprisController.qml

@@ -25,8 +25,6 @@ ShellRoot {
 
             color: "transparent"
 
-            // --- QUICKSHELL v0.3.0 WAYLAND OVERLAY CONTROL ---
-            // Zorgt dat het venster bovenop zweeft en niks naar beneden duwt
             exclusionMode: ExclusionMode.Ignore
             aboveWindows: true
 
@@ -35,12 +33,14 @@ ShellRoot {
             }
             
             margins {
-                top: 40 // Hoogte van je bar
+                top: 40
             }
 
-            // Gebruik exact jouw implicit maten opzet:
             implicitWidth: popupContent.width
             implicitHeight: popupContent.height
+
+            // Unmaps surface from Wayland completely when false
+            visible: popupContent.shouldBeVisible
 
             Multi {
                 id: popupContent
