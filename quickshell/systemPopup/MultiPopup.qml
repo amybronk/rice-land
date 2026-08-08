@@ -44,6 +44,8 @@ Item {
 
     clip: true
 
+    
+
     Rectangle {
         anchors.fill: parent
         color: Colors.background

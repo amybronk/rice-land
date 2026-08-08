@@ -104,7 +104,7 @@ local M = "SUPER"
 
 -- Launch Programs
 hl.bind(M .. " + Return", hl.dsp.exec_cmd(terminal))
-hl.bind(M .. " + Space",  hl.dsp.exec_cmd(menu))
+hl.bind(M .. " + SUPER_L",  hl.dsp.exec_cmd(menu))
 hl.bind(M .. " + E",      hl.dsp.exec_cmd(browser))
 hl.bind(M .. " + L",      hl.dsp.exec_cmd(musicplayer))
 hl.bind(M .. " + I",      hl.dsp.exec_cmd(onlinechat))
