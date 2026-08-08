@@ -1,3 +1,7 @@
+**preview widget**
+<img width="1088" height="500" alt="Screenshot_20260808_201029" src="https://github.com/user-attachments/assets/ce9c5549-b3c9-4bcc-87cb-abcb485204d6" />
+screenshot made with included tool "wallpaper in photo is not included"
+
 **configuration**
 
 - quickshell config `quickshell/Style.qml`
@@ -6,8 +10,14 @@
 - matugen config `matugen/config.toml`
 
 
+
 **installing / updating**
 
+```diff
+- install script is not fully working but it dos install most parts of system
+
+it is still mising all font family's and dos not start the fish shell
+```
 ```sh
 sh install.sh
 ```
