@@ -1,0 +1,6 @@
+module sliders
+
+SpeakerSlider 1.0 SpeakerSlider.qml
+MicSlider 1.0 MicSlider.qml
+MediaSlider 1.0 MediaSlider.qml
+BrightnessSlider 1.0 BrightnessSlider.qml

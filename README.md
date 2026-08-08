@@ -50,14 +50,33 @@ sh install.sh
 ├── notes
 │   ├── dir.md
 │   ├── klok widget dezinge notes.drawy
-│   └── not.md
+│   ├── not.md
+│   └── pase.md
 ├── quickshell
+│   ├── Audio.qml
 │   ├── bar
 │   │   ├── Bar.qml
 │   │   └── qmldir
+│   ├── Brightness.qml
 │   ├── Colors.qml
+│   ├── media
+│   │   ├── Mediaplayer.qml
+│   │   ├── Mediaprogresbar.qml
+│   │   ├── Media_thumbnail.qml
+│   │   ├── MprisController.qml
+│   │   ├── Next_button.qml
+│   │   ├── Pause_button.qml
+│   │   ├── Peff_buton.qml
+│   │   ├── PlayerSelector.qml
+│   │   └── qmldir
 │   ├── qmldir
 │   ├── shell.qml
+│   ├── slider_elements
+│   │   ├── BrightnessSlider.qml
+│   │   ├── MediaSlider.qml
+│   │   ├── MicSlider.qml
+│   │   ├── qmldir
+│   │   └── SpeakerSlider.qml
 │   ├── Style.qml
 │   ├── systemPopup
 │   │   ├── MultiPopup.qml
@@ -66,7 +85,8 @@ sh install.sh
 │   ├── Time.qml
 │   └── widgets
 │       ├── Clock.qml
-│       └── qmldir
+│       ├── qmldir
+│       └── Slider_container.qml
 ├── quickshell v1
 │   ├── AppPallet_qml
 │   │   ├── AppPalletButton.qml
